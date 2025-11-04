@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoachPro | Home</title>
+
+  <!-- Load Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- External stylesheet -->
+  <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Navigation Bar -->
+  <nav class="bg-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Branding -->
+        <div class="flex items-center"> 
+          <div class="logo">
+            <span class="logo-box">CP</span> CoachPro
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="hidden sm:block">
+          <div class="flex space-x-4">
+            <a href="#" class="nav-link active">Home page</a>
+            <a href="#" class="nav-link">Workouts</a>
+            <a href="#" class="nav-link">Settings</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <header class="hero">
+    <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
+      <h1 class="hero-title">
+        Welcome <span class="font-bold tracking-wider">Ningzz,</span>
+      </h1>
+      <p class="hero-subtitle">Ready to plan some amazing training sessions today?</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <h2 class="section-title">Clients:</h2>
+
+    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+
+      <!-- Client Card -->
+      <div class="client-card">
+        <div class="profile-placeholder">
+          <svg class="profile-icon" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 12 
+            4s-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 
+            1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <p class="client-name">Client Name</p>
+        <p class="client-link">View Profile</p>
+      </div>
+
+      <!-- Client Card 2 -->
+      <div class="client-card">
+        <div class="profile-placeholder">
+          <svg class="profile-icon" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 
+            12 4s-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 
+            0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <p class="client-name">Client Name</p>
+        <p class="client-link">View Profile</p>
+      </div>
+
+      <!-- Client Card 3 -->
+      <div class="client-card">
+        <div class="profile-placeholder">
+          <svg class="profile-icon" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4S14.21 4 
+            12 4s-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 
+            0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <p class="client-name">Client Name</p>
+        <p class="client-link">View Profile</p>
+      </div>
+
+      <!-- Add New Client -->
+      <div class="add-client-card">
+        <div class="text-center text-gray-500">
+          <svg class="w-8 h-8 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 
+            0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p class="font-medium">Add New Client</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
