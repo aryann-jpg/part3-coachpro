@@ -3,9 +3,12 @@
     {
       "coachId": "c001",
       "username": "coach_alex",
-      "hashed_password": "securely_hashed_password_placeholder", 
+      "hashed_password": "securely_hashed_password_placeholder",
       "full_name": "Alex Johnson",
-      "client_ids": ["cl_001","cl_002"]
+      "client_ids": [
+        "cl_001",
+        "cl_002"
+      ]
     }
   ],
   "clients": [
@@ -34,27 +37,112 @@
       "clientId": "cl_001",
       "week_start_date": "2025-11-10",
       "plan": {
-        "Monday": {
-          "title": "Full Body Strength A",
-          "status": "pending",
-          "exercises": [
-            {"name": "Squats", "sets": 3, "reps": 8, "notes": "Focus on depth."},
-            {"name": "Bench Press", "sets": 3, "reps": 8, "notes": "Controlled movement."},
-            {"name": "Bent-Over Rows", "sets": 3, "reps": 10, "notes": "Light weight, strict form."}
-          ]
-        },
-        "Tuesday": {"title": "Rest/Active Recovery", "status": "pending", "exercises": []},
-        "Wednesday": {
-          "title": "Endurance Run",
-          "status": "pending",
-          "exercises": [
-            {"name": "Run", "distance": "5km", "time_goal": "30:00"}
-          ]
-        },
-        "Thursday": {"title": "Full Body Strength B", "status": "pending", "exercises": []},
-        "Friday": {"title": "Core and Mobility", "status": "pending", "exercises": []},
-        "Saturday": {"title": "Rest", "status": "pending", "exercises": []},
-        "Sunday": {"title": "Rest", "status": "pending", "exercises": []}
+        "Monday": [
+          {
+            "workout_name": "Squats",
+            "sets": 3,
+            "reps": 8,
+            "weight": 60
+          },
+          {
+            "workout_name": "Bench Press",
+            "sets": 3,
+            "reps": 8,
+            "weight": 40
+          },
+          {
+            "workout_name": "Bent-Over Rows",
+            "sets": 3,
+            "reps": 10,
+            "weight": 35
+          }
+        ],
+        "Tuesday": [],
+        "Wednesday": [
+          {
+            "workout_name": "Run (5km)",
+            "sets": 1,
+            "reps": 1,
+            "weight": 0
+          }
+        ],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
+      }
+    },
+    {
+      "workoutId": "wk1762973732984172",
+      "clientId": "cl_002",
+      "week_start_date": "2025-11-10",
+      "plan": {
+        "Monday": [
+          {
+            "workout_name": "Bench Press",
+            "sets": 3,
+            "reps": 15,
+            "weight": 50
+          },
+          {
+            "workout_name": "Lateral Raises",
+            "sets": 3,
+            "reps": 15,
+            "weight": 5
+          },
+          {
+            "workout_name": "Tricep Pushdowns",
+            "sets": 3,
+            "reps": 15,
+            "weight": 25
+          }
+        ],
+        "Tuesday": [
+          {
+            "workout_name": "Legs Press",
+            "sets": 3,
+            "reps": 10,
+            "weight": 55
+          },
+          {
+            "workout_name": "Calves Raises",
+            "sets": 3,
+            "reps": 15,
+            "weight": 25
+          },
+          {
+            "workout_name": "Legs Extension",
+            "sets": 3,
+            "reps": 15,
+            "weight": 50
+          }
+        ],
+        "Wednesday": [
+          {
+            "workout_name": "Rest Day",
+            "sets": 0,
+            "reps": 0,
+            "weight": 0
+          }
+        ],
+        "Thursday": [
+          {
+            "workout_name": "Rest Day",
+            "sets": 0,
+            "reps": 0,
+            "weight": 0
+          }
+        ],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": [
+          {
+            "workout_name": "Weighted Pull-ups",
+            "sets": 4,
+            "reps": 15,
+            "weight": 10
+          }
+        ]
       }
     }
   ],
@@ -63,8 +151,17 @@
       "templateId": "t_001",
       "name": "Sample Strength Template (Yi Xuan's Feature)",
       "exercises": [
-        {"name": "Deadlifts", "sets": 3, "reps": 5, "notes": "Warm up thoroughly."},
-        {"name": "Overhead Press", "sets": 3, "reps": 8}
+        {
+          "name": "Deadlifts",
+          "sets": 3,
+          "reps": 5,
+          "notes": "Warm up thoroughly."
+        },
+        {
+          "name": "Overhead Press",
+          "sets": 3,
+          "reps": 8
+        }
       ]
     }
   ]

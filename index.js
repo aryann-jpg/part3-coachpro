@@ -3,6 +3,8 @@ const path = require('path');
 const bodyParser = require("body-parser");
 const crypto = require('crypto'); // Import the crypto module for unique tokens
 const { authenticateCoach, getClientsByCoachId } = require('./utils/authentication.js'); // Utility functions
+const { addWorkoutForClient } = require('./utils/SufianUtil.js');
+const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -70,6 +72,21 @@ app.get('/api/clients/:coachId', async (req, res) => {
     return res.status(500).json({ message: 'Internal server error fetching client data.' });
   }
 });
+
+app.post('/add-workout', async (req, res) => {
+  try {
+    const { clientId, week_start_date, day, exercises } = req.body;
+    if (!clientId || !week_start_date || !day || !exercises)
+      return res.status(400).json({ success: false, message: 'Missing fields' });
+
+    await addWorkoutForClient({ clientId, week_start_date, day, exercises });
+    res.json({ success: true }); // ✅ Always return JSON
+  } catch (err) {
+    console.error('Add workout error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
 
 // --- SERVER STARTUP ---
 const server = app.listen(PORT, function () {
