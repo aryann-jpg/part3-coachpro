@@ -11,17 +11,18 @@ const workoutWeekContainer = document.getElementById('workoutWeekContainer');
 const createNewPlanButton = document.getElementById('createNewPlanButton');
 
 // ✅ Redirect to Create Workout page (use your actual filename)
-if (createNewPlanButton) {
-  createNewPlanButton.addEventListener('click', () => {
-    const clientId = createNewPlanButton.dataset.clientId;
-    if (clientId) {
-      sessionStorage.setItem('selectedClientId', clientId);
-      window.location.href = '/sufian-create.html?clientId=' + encodeURIComponent(clientId);
-    } else {
-      alert('Please select a client first.');
-    }
-  });
+function createNewWorkoutPlan() {
+  const createNewPlanButton = document.getElementById('createNewPlanButton');
+  const clientId = createNewPlanButton?.dataset.clientId;
+
+  if (clientId) {
+    sessionStorage.setItem('selectedClientId', clientId);
+    window.location.href = '/sufian-create.html?clientId=' + encodeURIComponent(clientId);
+  } else {
+    alert('Please select a client first.');
+  }
 }
+
 
 let selectedClientCard = null;
 
@@ -30,11 +31,11 @@ if (!coachId || !authToken) {
   // window.location.href = '/login.html';
 }
 
-document.getElementById('logoutButton').addEventListener('click', () => {
+function logoutCoach() {
   sessionStorage.removeItem('coachId');
   sessionStorage.removeItem('authToken');
   // window.location.href = '/login.html';
-});
+}
 
 // Show the weekly plan scaffold then populate from file
 function showClientWorkoutPlan(clientName, clientId) {
@@ -161,5 +162,3 @@ async function loadDashboardData() {
     loadingIndicator.style.display = 'none';
   }
 }
-
-document.addEventListener('DOMContentLoaded', loadDashboardData);
