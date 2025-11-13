@@ -10,7 +10,6 @@ const workoutDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Sa
 const workoutPlanSection = document.getElementById('workoutPlanSection');
 const clientPlanName = document.getElementById('clientPlanName');
 const workoutWeekContainer = document.getElementById('workoutWeekContainer');
-// NEW: Get the button reference
 const createNewPlanButton = document.getElementById('createNewPlanButton'); 
 
 // State to track the currently selected client card element
@@ -48,18 +47,32 @@ function showClientWorkoutPlan(clientName, clientId) {
     workoutWeekContainer.innerHTML = ''; 
 
     workoutDays.forEach(day => {
-        const dayBox = document.createElement('div');
-        dayBox.className = 'day-box';
-        dayBox.dataset.day = day; // Use dataset for easier identification
+        // --- START MODIFICATION: Create the link element ---
         
-        // Always shows "Empty!" as requested
-        dayBox.innerHTML = `
+        // 1. Create an anchor element (<a>) instead of a generic div
+        const dayBoxLink = document.createElement('a'); 
+        
+        // 2. Set the href to the edit page with query parameters (client and day)
+        dayBoxLink.href = `edit-workout.html?client=${clientId}&day=${day}`;
+        
+        // 3. Add styling classes, including 'block' to make it clickable everywhere
+        dayBoxLink.className = 'day-box block cursor-pointer transition hover:shadow-lg hover:border-primary/50';
+        
+        // 4. Set dataset attributes on the link
+        dayBoxLink.dataset.day = day; 
+        
+        // 5. Populate inner HTML
+        dayBoxLink.innerHTML = `
             <h3 class="day-title">${day}</h3>
             <div class="empty-content">
                 Empty!
             </div>
         `;
-        workoutWeekContainer.appendChild(dayBox);
+        
+        // 6. Append the linked element
+        workoutWeekContainer.appendChild(dayBoxLink);
+        
+        // --- END MODIFICATION ---
     });
     
     // Show the section
@@ -115,7 +128,7 @@ async function loadDashboardData() {
     let data = null;
 
     try {
-        // Fetch data from the local JSON file
+        // Fetch data from the local JSON file (Make sure you have /data/coaching-data.json)
         const response = await fetch('/data/coaching-data.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -147,6 +160,19 @@ async function loadDashboardData() {
             noClientsMessage.textContent = 'No active clients found. Time to add one!';
             clientGrid.insertBefore(noClientsMessage, addClientCard);
         }
+        
+        // AUTO-SELECT FIRST CLIENT AFTER LOADING
+        if (data.clients && data.clients.length > 0) {
+            const firstClient = data.clients[0];
+            // Find the card element to trigger selection/display
+            const firstCard = clientGrid.querySelector('.client-card');
+            if(firstCard) {
+                 // Set the selection state and display the plan for the first client
+                firstCard.classList.add('selected');
+                selectedClientCard = firstCard;
+                showClientWorkoutPlan(firstClient.name, firstClient.clientId);
+            }
+        }
 
     } catch (error) {
         console.error('Dashboard Data Load Error:', error);
@@ -162,3 +188,15 @@ async function loadDashboardData() {
 
 // 5. Start the data load when the page is ready
 document.addEventListener('DOMContentLoaded', loadDashboardData);
+
+
+// BONUS: Update the 'Create New Plan' button to use the new redirection logic
+createNewPlanButton.addEventListener('click', (event) => {
+    const clientId = event.currentTarget.dataset.clientId;
+    if (clientId) {
+        // Redirect to edit-workout.html, defaulting to Monday and indicating a new plan
+        window.location.href = `edit-workout.html?client=${clientId}&day=Monday&new=true`;
+    } else {
+        alert("Please select a client first before creating a plan.");
+    }
+});
