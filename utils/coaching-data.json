@@ -3,9 +3,12 @@
     {
       "coachId": "c001",
       "username": "coach_alex",
-      "hashed_password": "securely_hashed_password_placeholder", 
+      "hashed_password": "securely_hashed_password_placeholder",
       "full_name": "Alex Johnson",
-      "client_ids": ["cl_001","cl_002"]
+      "client_ids": [
+        "cl_001",
+        "cl_002"
+      ]
     }
   ],
   "clients": [
@@ -38,23 +41,58 @@
           "title": "Full Body Strength A",
           "status": "pending",
           "exercises": [
-            {"name": "Squats", "sets": 3, "reps": 8, "notes": "Focus on depth."},
-            {"name": "Bench Press", "sets": 3, "reps": 8, "notes": "Controlled movement."},
-            {"name": "Bent-Over Rows", "sets": 3, "reps": 10, "notes": "Light weight, strict form."}
+            {
+              "name": "Bench Press",
+              "sets": 4,
+              "reps": 10,
+              "weight": 80,
+              "note": "RPE 8"
+            },
+            {
+              "name": "Deadlift",
+              "sets": 3,
+              "reps": 5,
+              "weight": 120,
+              "note": "Heavy"
+            }
           ]
         },
-        "Tuesday": {"title": "Rest/Active Recovery", "status": "pending", "exercises": []},
+        "Tuesday": {
+          "title": "Rest/Active Recovery",
+          "status": "pending",
+          "exercises": []
+        },
         "Wednesday": {
           "title": "Endurance Run",
           "status": "pending",
           "exercises": [
-            {"name": "Run", "distance": "5km", "time_goal": "30:00"}
+            {
+              "name": "Run",
+              "distance": "5km",
+              "time_goal": "30:00"
+            }
           ]
         },
-        "Thursday": {"title": "Full Body Strength B", "status": "pending", "exercises": []},
-        "Friday": {"title": "Core and Mobility", "status": "pending", "exercises": []},
-        "Saturday": {"title": "Rest", "status": "pending", "exercises": []},
-        "Sunday": {"title": "Rest", "status": "pending", "exercises": []}
+        "Thursday": {
+          "title": "Full Body Strength B",
+          "status": "pending",
+          "exercises": []
+        },
+        "Friday": {
+          "title": "Core and Mobility",
+          "status": "pending",
+          "exercises": []
+        },
+        "Saturday": {
+          "title": "Rest",
+          "status": "pending",
+          "exercises": []
+        },
+        "Sunday": {
+          "title": "Rest",
+          "status": "pending",
+          "exercises": []
+        }
       }
     }
   ],
@@ -63,8 +101,17 @@
       "templateId": "t_001",
       "name": "Sample Strength Template (Yi Xuan's Feature)",
       "exercises": [
-        {"name": "Deadlifts", "sets": 3, "reps": 5, "notes": "Warm up thoroughly."},
-        {"name": "Overhead Press", "sets": 3, "reps": 8}
+        {
+          "name": "Deadlifts",
+          "sets": 3,
+          "reps": 5,
+          "notes": "Warm up thoroughly."
+        },
+        {
+          "name": "Overhead Press",
+          "sets": 3,
+          "reps": 8
+        }
       ]
     }
   ]
