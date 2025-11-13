@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "templateId": "t_1763017388963",
+    "name": "Workout 1",
+    "exercises": [
+      {
+        "name": "bench press",
+        "sets": 3,
+        "reps": 12,
+        "notes": "strict form"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": "cl_001"
+  }
+]
