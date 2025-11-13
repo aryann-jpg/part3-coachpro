@@ -16,7 +16,7 @@ function addTemplate() {
 
     // Configure the POST request to your server endpoint
     var request = new XMLHttpRequest();
-    request.open("POST", "/api/templates", true);
+    request.open("POST", "/api/add-workout-template", true);
     request.setRequestHeader('Content-Type', 'application/json');
 
     request.onload = function () {

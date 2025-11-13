@@ -1,16 +1,16 @@
 [
   {
-    "templateId": "t_1763019427531",
-    "name": "Full Body Strength",
+    "templateId": "t_1763021665016",
+    "name": "workout 2",
     "exercises": [
       {
-        "name": "Push-ups",
-        "sets": 3,
-        "reps": 12,
-        "notes": "Keep back straight"
+        "name": "smith machine",
+        "sets": 1,
+        "reps": 1,
+        "notes": ""
       }
     ],
-    "coachId": "12345",
-    "clientId": "67890"
+    "coachId": "c001",
+    "clientId": null
   }
 ]
