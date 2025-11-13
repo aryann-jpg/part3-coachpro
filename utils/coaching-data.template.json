@@ -1,16 +1,16 @@
 [
   {
-    "templateId": "t_1763017388963",
-    "name": "Workout 1",
+    "templateId": "t_1763019427531",
+    "name": "Full Body Strength",
     "exercises": [
       {
-        "name": "bench press",
+        "name": "Push-ups",
         "sets": 3,
         "reps": 12,
-        "notes": "strict form"
+        "notes": "Keep back straight"
       }
     ],
-    "coachId": "c001",
-    "clientId": "cl_001"
+    "coachId": "12345",
+    "clientId": "67890"
   }
 ]

@@ -66,8 +66,8 @@ app.get('/api/clients/:coachId', async (req, res) => {
   }
 });
 
-// 3. POST /api/templates — Save new template
-app.post('/api/templates', async (req, res) => {
+// 3. POST /api/add-workout-template — Save new template
+app.post('/api/add-workout-template', async (req, res) => {
   try {
     console.log('Received template POST body:', req.body);
     const { name, exercises, coachId, clientId } = req.body;
@@ -111,6 +111,7 @@ app.post('/api/templates', async (req, res) => {
     res.status(500).json({ message: "Internal server error saving template." });
   }
 });
+
 
 // ---------------------------
 // Start Server
