@@ -1,45 +1,43 @@
-<body onload="initEditWorkoutPage()">
-    <div class="container">
-        <header class="header">
-            <div class="logo">CoachPro</div>
-            <div class="banner-placeholder">
-                <p class="workout-name-label">Workout Name</p>
-            </div>
-        </header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Workout Plan | CoachPro</title>
 
-        <main class="content">
-            <h1 class="page-title">Edit workout</h1>
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-            <div class="controls">
-                <div class="dropdown-container">
-                    <button id="day-select-button" class="selector-button selected">Loading Day...</button>
-                </div>
-                <div class="dropdown-container">
-                    <button id="type-select-button" class="selector-button selected">Push</button>
-                </div>
-            </div>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/edit.css" />
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col" onload="loadClientWorkout()">
 
-            <div class="table-container">
-                <table id="workout-table">
-                    <thead>
-                        <tr>
-                            <th>Exercise</th>
-                            <th>Sets</th>
-                            <th>Reps</th>
-                            <th>Weight (Kg)</th>
-                            <th>Note</th>
-                        </tr>
-                    </thead>
-                    <tbody id="workout-body"></tbody>
-                </table>
-            </div>
-
-            <div class="save-button-container">
-                <button class="save-button" onclick="saveWorkoutChanges()">Save Changes</button>
-            </div>
-        </main>
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <h1 class="text-xl font-semibold text-indigo-600">CoachPro</h1>
+      <button onclick="goBack()" class="text-gray-600 hover:text-indigo-600 transition">← Back to Dashboard</button>
     </div>
+  </nav>
 
-    <script src="./utils/AryanUtil.js"></script>
-    <script src="./js/aryan.js"></script>
+  <!-- Page Content -->
+  <main class="flex-grow max-w-4xl mx-auto p-6">
+    <h2 class="text-2xl font-bold mb-6">Edit Workout Plan for <span id="clientName" class="text-indigo-600"></span></h2>
+
+    <form id="editWorkoutForm" onsubmit="saveWorkoutPlan(event)" class="space-y-6">
+      <!-- Workout plan dynamically generated here -->
+      <div id="workoutDaysContainer" class="space-y-6"></div>
+
+      <div class="flex justify-end gap-4 pt-4">
+        <button type="button" onclick="resetForm()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Reset</button>
+        <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save Changes</button>
+      </div>
+    </form>
+
+    <p id="saveStatus" class="mt-6 text-center text-sm text-gray-600"></p>
+  </main>
+
+  <script src="js/aryan.js"></script>
 </body>
+</html>

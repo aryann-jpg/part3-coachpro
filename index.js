@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5050;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files and default to login.html
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public'), { index: 'login.html' }));
 
 // ✅ Serve coaching-data.json for read-only access
@@ -20,9 +20,8 @@ app.get('/data/coaching-data.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'utils', 'coaching-data.json'));
 });
 
-
 // ============================================================
-// 🏋️ WORKOUT ROUTES (REST-correct version)
+// 🏋️ WORKOUT ROUTES
 // ============================================================
 
 // GET a client's workout for a specific day
@@ -49,40 +48,35 @@ app.get('/api/workout', (req, res) => {
   }
 });
 
+// PUT to update a client's full weekly workout plan
+app.put('/api/workout/:clientId', (req, res) => {
+  const clientId = req.params.clientId;
+  const { plan } = req.body; // expects full week
 
-// PUT to update (edit) a client's workout plan
-app.put('/api/workout', (req, res) => {
-  const { client, day, exercises } = req.body;
-
-  if (!client || !day || !Array.isArray(exercises)) {
-    return res.status(400).json({ error: "Missing or invalid request body (client, day, exercises required)." });
+  if (!plan || typeof plan !== 'object') {
+    return res.status(400).json({ error: "Missing or invalid 'plan' in request body." });
   }
 
   try {
     const filePath = path.join(__dirname, 'utils', 'coaching-data.json');
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    const workout = data.workouts.find(w => w.clientId === client);
-    if (!workout) return res.status(404).json({ error: 'Client workout not found.' });
+    const workout = data.workouts.find(w => w.clientId === clientId);
+    if (!workout) return res.status(404).json({ error: "Client workout not found." });
 
-    if (!workout.plan[day]) {
-      workout.plan[day] = { title: `${day} Plan`, status: "pending", exercises: [] };
-    }
-
-    workout.plan[day].exercises = exercises;
+    // Overwrite the full week's plan
+    workout.plan = plan;
 
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
-    res.json({ message: 'Workout updated successfully', updatedDay: day, count: exercises.length });
-
-  } catch (error) {
-    console.error("Error saving workout:", error);
-    res.status(500).json({ error: 'Internal server error saving workout.' });
+    res.json({ message: "Workout plan updated successfully!", plan });
+  } catch (err) {
+    console.error("Error saving workout plan:", err);
+    res.status(500).json({ error: "Failed to save workout plan." });
   }
 });
 
-
 // ============================================================
-// 🔐 AUTHENTICATION + CLIENT ROUTES (unchanged)
+// 🔐 AUTHENTICATION + CLIENT ROUTES
 // ============================================================
 
 // Login route
@@ -130,6 +124,7 @@ app.get('/api/clients/:coachId', async (req, res) => {
     return res.status(500).json({ message: 'Internal server error fetching client data.' });
   }
 });
+
 
 const server = app.listen(PORT, function () {
   const address = server.address();
