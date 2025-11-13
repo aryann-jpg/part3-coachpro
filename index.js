@@ -1,40 +1,100 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const bodyParser = require("body-parser");
-const crypto = require('crypto'); // Import the crypto module for unique tokens
-const { authenticateCoach, getClientsByCoachId } = require('./utils/authentication.js'); // Utility functions
+const crypto = require('crypto');
+const { authenticateCoach, getClientsByCoachId } = require('./utils/authentication.js');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Middleware for parsing request bodies
+// Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files from the 'public' folder
-// Default route serves login.html instead of index.html
+// Serve static files and default to login.html
 app.use(express.static(path.join(__dirname, 'public'), { index: 'login.html' }));
 
-// ✅ NEW: Serve the coaching-data.json file from the utils folder (read-only access)
+// ✅ Serve coaching-data.json for read-only access
 app.get('/data/coaching-data.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'utils', 'coaching-data.json'));
 });
 
-// --- API ROUTES ---
 
-// 1. Authentication Route
+// ============================================================
+// 🏋️ WORKOUT ROUTES (REST-correct version)
+// ============================================================
+
+// GET a client's workout for a specific day
+app.get('/api/workout', (req, res) => {
+  const { client, day } = req.query;
+  if (!client || !day) {
+    return res.status(400).json({ error: "Missing 'client' or 'day' query parameter." });
+  }
+
+  try {
+    const filePath = path.join(__dirname, 'utils', 'coaching-data.json');
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    const workout = data.workouts.find(w => w.clientId === client);
+    if (!workout) return res.status(404).json({ error: 'Client workout not found.' });
+
+    const dayData = workout.plan[day];
+    if (!dayData) return res.status(404).json({ error: `No workout found for ${day}.` });
+
+    res.json(dayData);
+  } catch (error) {
+    console.error("Error reading workout data:", error);
+    res.status(500).json({ error: 'Internal server error reading workout data.' });
+  }
+});
+
+
+// PUT to update (edit) a client's workout plan
+app.put('/api/workout', (req, res) => {
+  const { client, day, exercises } = req.body;
+
+  if (!client || !day || !Array.isArray(exercises)) {
+    return res.status(400).json({ error: "Missing or invalid request body (client, day, exercises required)." });
+  }
+
+  try {
+    const filePath = path.join(__dirname, 'utils', 'coaching-data.json');
+    const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    const workout = data.workouts.find(w => w.clientId === client);
+    if (!workout) return res.status(404).json({ error: 'Client workout not found.' });
+
+    if (!workout.plan[day]) {
+      workout.plan[day] = { title: `${day} Plan`, status: "pending", exercises: [] };
+    }
+
+    workout.plan[day].exercises = exercises;
+
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+    res.json({ message: 'Workout updated successfully', updatedDay: day, count: exercises.length });
+
+  } catch (error) {
+    console.error("Error saving workout:", error);
+    res.status(500).json({ error: 'Internal server error saving workout.' });
+  }
+});
+
+
+// ============================================================
+// 🔐 AUTHENTICATION + CLIENT ROUTES (unchanged)
+// ============================================================
+
+// Login route
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
-    
-    // Call your utility function for authentication
     const coach = await authenticateCoach(username, password);
 
-    // Respond with coach details and a unique session token
     res.status(200).json({
       message: "Login successful",
       coachId: coach.coachId,
-      token: crypto.randomUUID() // Generate secure random token
+      token: crypto.randomUUID()
     });
 
   } catch (error) {
@@ -48,7 +108,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// 2. Client Fetching Route for Dashboard
+// Get clients for a coach
 app.get('/api/clients/:coachId', async (req, res) => {
   try {
     const coachId = req.params.coachId;
@@ -71,7 +131,6 @@ app.get('/api/clients/:coachId', async (req, res) => {
   }
 });
 
-// --- SERVER STARTUP ---
 const server = app.listen(PORT, function () {
   const address = server.address();
   const baseUrl = `http://${address.address === "::" ? 'localhost' : address.address}:${address.port}`;

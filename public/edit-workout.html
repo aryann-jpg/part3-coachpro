@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Workout - CoachPro</title>
-<<<<<<< Updated upstream
-    <link rel="stylesheet" href="./css/edit.css">    
-=======
-    <link rel="stylesheet" href="./css/edit.css">
->>>>>>> Stashed changes
-</head>
-<body>
+<body onload="initEditWorkoutPage()">
     <div class="container">
         <header class="header">
             <div class="logo">CoachPro</div>
@@ -24,19 +12,11 @@
 
             <div class="controls">
                 <div class="dropdown-container">
-<<<<<<< Updated upstream
                     <button id="day-select-button" class="selector-button selected">Loading Day...</button>
                 </div>
                 <div class="dropdown-container">
                     <button id="type-select-button" class="selector-button selected">Push</button>
                 </div>
-=======
-                    <button id="day-select" class="selector-button selected">Monday</button>
-                    </div>
-                <div class="dropdown-container">
-                    <button id="type-select" class="selector-button selected">Push</button>
-                    </div>
->>>>>>> Stashed changes
             </div>
 
             <div class="table-container">
@@ -50,33 +30,7 @@
                             <th>Note</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" value="Bench Press"></td>
-                            <td><input type="number" value="3"></td>
-                            <td><input type="number" value="8"></td>
-                            <td><input type="number" value="70"></td>
-                            <td><input type="text" value="RPE 8"></td>
-                        </tr>
-<<<<<<< Updated upstream
-                    </tbody>
-=======
-                        <tr>
-                            <td><input type="text"></td>
-                            <td><input type="number"></td>
-                            <td><input type="number"></td>
-                            <td><input type="number"></td>
-                            <td><input type="text"></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text"></td>
-                            <td><input type="number"></td>
-                            <td><input type="number"></td>
-                            <td><input type="number"></td>
-                            <td><input type="text"></td>
-                        </tr>
-                        </tbody>
->>>>>>> Stashed changes
+                    <tbody id="workout-body"></tbody>
                 </table>
             </div>
 
@@ -85,10 +39,7 @@
             </div>
         </main>
     </div>
-<<<<<<< Updated upstream
-    <script src="AryanUtil.js"></script> 
-=======
+
+    <script src="./utils/AryanUtil.js"></script>
     <script src="./js/aryan.js"></script>
->>>>>>> Stashed changes
 </body>
-</html>
