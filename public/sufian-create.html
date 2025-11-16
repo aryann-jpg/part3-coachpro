@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="css/sufian-create.css" />
 </head>
 
-<body class="bg-gray-50 min-h-screen font-sans">
+<body class="bg-gray-50 min-h-screen font-sans" onload="initWorkoutPage()">
 
   <!-- Navbar -->
   <nav class="bg-white shadow-sm py-3">
@@ -76,9 +76,9 @@
 
       <!-- Buttons -->
       <div class="flex items-center justify-between mt-6">
-        <button id="addRowBtn" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm">Add More</button>
+        <button id="addRowBtn" class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm" onclick="addExerciseRow()">Add More</button>
         <div class="space-x-3">
-          <button id="saveWorkoutBtn" class="px-5 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 shadow-sm">Save Workout</button>
+          <button id="saveWorkoutBtn" class="px-5 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 shadow-sm" onclick="saveWorkout()">Save Workout</button>
           <a href="index.html" class="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100 shadow-sm">Cancel</a>
         </div>
       </div>
@@ -92,13 +92,14 @@
       <h3 class="text-lg font-semibold mb-2 text-gray-800">Workout Added Successfully</h3>
       <p class="text-sm text-gray-600 mb-4">Your workout has been added. What would you like to do next?</p>
       <div class="flex justify-center space-x-3">
-        <button id="modalContinueBtn" class="px-4 py-2 rounded border">Continue Adding</button>
-        <button id="modalDoneBtn" class="px-4 py-2 rounded bg-indigo-600 text-white">Done</button>
+        <button id="modalContinueBtn" class="px-4 py-2 rounded border" onclick="continueAdding()">Continue Adding</button>
+        <button id="modalDoneBtn" class="px-4 py-2 rounded bg-indigo-600 text-white" onclick="doneAdding()">Done</button>
       </div>
     </div>
   </div>
 
   <!-- Script -->
+  <script src="js/sufian-helper.js"></script>
   <script src="js/sufian.js"></script>
 </body>
 </html>

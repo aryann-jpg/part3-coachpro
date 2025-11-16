@@ -99,50 +99,29 @@
         ],
         "Tuesday": [
           {
-            "workout_name": "Legs Press",
+            "workout_name": "Weighted Pull-ups",
             "sets": 3,
             "reps": 10,
-            "weight": 55
+            "weight": 10
           },
           {
-            "workout_name": "Calves Raises",
+            "workout_name": "Bent-over Rows",
             "sets": 3,
             "reps": 15,
+            "weight": 15
+          },
+          {
+            "workout_name": "Bicep Curls",
+            "sets": 3,
+            "reps": 12,
             "weight": 25
-          },
-          {
-            "workout_name": "Legs Extension",
-            "sets": 3,
-            "reps": 15,
-            "weight": 50
           }
         ],
-        "Wednesday": [
-          {
-            "workout_name": "Rest Day",
-            "sets": 0,
-            "reps": 0,
-            "weight": 0
-          }
-        ],
-        "Thursday": [
-          {
-            "workout_name": "Rest Day",
-            "sets": 0,
-            "reps": 0,
-            "weight": 0
-          }
-        ],
+        "Wednesday": [],
+        "Thursday": [],
         "Friday": [],
         "Saturday": [],
-        "Sunday": [
-          {
-            "workout_name": "Weighted Pull-ups",
-            "sets": 4,
-            "reps": 15,
-            "weight": 10
-          }
-        ]
+        "Sunday": []
       }
     }
   ],
