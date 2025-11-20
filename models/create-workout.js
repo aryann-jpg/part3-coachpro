@@ -1,7 +1,6 @@
 class Workout {
-  constructor(clientId, week_start_date) {
+  constructor(clientId) {
     this.clientId = clientId;
-    this.week_start_date = week_start_date;
 
     this.plan = {
       Monday: [],

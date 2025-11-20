@@ -17,8 +17,6 @@
       "coachId": "c001",
       "name": "Sarah Chen",
       "goal": "Build functional strength and endurance.",
-      "start_date": "2024-09-01",
-      "last_checkin": "2025-11-09",
       "profile_image_url": "images/sarah_chen.jpg"
     },
     {
@@ -26,8 +24,6 @@
       "coachId": "c001",
       "name": "Bombo Clart",
       "goal": "Build functional strength and endurance.",
-      "start_date": "2024-09-01",
-      "last_checkin": "2025-11-09",
       "profile_image_url": "images/bombo_clart.jpg"
     }
   ],
@@ -35,7 +31,6 @@
     {
       "workoutId": "wk001",
       "clientId": "cl_001",
-      "week_start_date": "2025-11-10",
       "plan": {
         "Monday": [
           {
@@ -57,7 +52,14 @@
             "weight": 35
           }
         ],
-        "Tuesday": [],
+        "Tuesday": [
+          {
+            "workout_name": "Pull-ups",
+            "sets": 2,
+            "reps": 12,
+            "weight": 10
+          }
+        ],
         "Wednesday": [
           {
             "workout_name": "Run (5km)",
@@ -75,7 +77,6 @@
     {
       "workoutId": "wk1762973732984172",
       "clientId": "cl_002",
-      "week_start_date": "2025-11-10",
       "plan": {
         "Monday": [
           {
@@ -123,25 +124,6 @@
         "Saturday": [],
         "Sunday": []
       }
-    }
-  ],
-  "templates": [
-    {
-      "templateId": "t_001",
-      "name": "Sample Strength Template (Yi Xuan's Feature)",
-      "exercises": [
-        {
-          "name": "Deadlifts",
-          "sets": 3,
-          "reps": 5,
-          "notes": "Warm up thoroughly."
-        },
-        {
-          "name": "Overhead Press",
-          "sets": 3,
-          "reps": 8
-        }
-      ]
     }
   ]
 }

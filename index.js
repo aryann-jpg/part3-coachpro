@@ -65,11 +65,11 @@ app.get('/api/clients/:coachId', async (req, res) => {
 
 app.post('/add-workout', async (req, res) => {
   try {
-    const { clientId, week_start_date, day, exercises } = req.body;
-    if (!clientId || !week_start_date || !day || !exercises)
+    const { clientId, day, exercises } = req.body;
+    if (!clientId || !day || !exercises)
       return res.status(400).json({ success: false, message: 'Missing fields' });
 
-    await addWorkoutForClient({ clientId, week_start_date, day, exercises });
+    await addWorkoutForClient({ clientId, day, exercises });
     res.json({ success: true }); 
   } catch (err) {
     console.error('Add workout error:', err);

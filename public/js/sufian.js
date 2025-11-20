@@ -16,8 +16,7 @@ function saveWorkout() {
   const clientId = params.get("clientId");
 
   const payload = {
-    clientId,
-    week_start_date: getMondayISO(new Date()), 
+    clientId, 
     day,
     exercises
   };

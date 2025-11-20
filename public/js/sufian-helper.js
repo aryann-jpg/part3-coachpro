@@ -1,12 +1,3 @@
-function getMondayISO(date) {
-  const d = new Date(date);
-  const day = d.getUTCDay(); 
-  const diff = day === 0 ? -6 : 1 - day; 
-  d.setUTCDate(d.getUTCDate() + diff);
-  d.setUTCHours(0, 0, 0, 0);
-  return d.toISOString().split("T")[0];
-}
-
 function addExerciseRow() {
   const exerciseTbody = document.getElementById("exerciseTbody");
   const tr = document.createElement("tr");

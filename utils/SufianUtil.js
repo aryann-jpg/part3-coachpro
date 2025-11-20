@@ -4,16 +4,16 @@ const { Workout } = require("../models/create-workout.js");
 
 const COACHING_FILE = path.join(__dirname, "coaching-data.json");
 
-async function addWorkoutForClient({ clientId, week_start_date, day, exercises }) {
+async function addWorkoutForClient({ clientId, day, exercises }) {
   const db = JSON.parse(await fs.readFile(COACHING_FILE, "utf8"));
   if (!db.workouts) db.workouts = [];
 
   let plan = db.workouts.find(
-    (w) => w.clientId === clientId && w.week_start_date === week_start_date
+    (w) => w.clientId === clientId
   );
 
   if (!plan) {
-    plan = new Workout(clientId, week_start_date);
+    plan = new Workout(clientId);
     db.workouts.push(plan);
   }
 

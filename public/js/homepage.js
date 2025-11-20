@@ -63,8 +63,7 @@ function populateClientWorkouts(clientId) {
     .then(res => res.json())
     .then(data => {
       const clientWorkouts = (data.workouts || [])
-        .filter(w => w.clientId === clientId)
-        .sort((a,b) => new Date(b.week_start_date) - new Date(a.week_start_date))[0];
+        .find(w => w.clientId === clientId);
       if (!clientWorkouts || !clientWorkouts.plan) return;
 
       workoutDays.forEach(day => {
