@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Workout Template</title>
+    <link rel="stylesheet" href="./css/workoutTemplate.css">
+</head>
+<body>
+
+<h2>Create a New Workout Template</h2>
+
+<form id="templateForm" onsubmit="event.preventDefault(); addTemplate();">
+
+    <!-- Template Name -->
+    <label for="templateName">Template Name:</label><br>
+    <input type="text" id="templateName" required><br><br>
+
+    <!-- Client Selection (Optional) -->
+    <label for="clientSelect">Assign to Client (optional):</label><br>
+    <select id="clientSelect">
+        <option value="">--None--</option>
+        <option value="cl_001">Sarah Chen</option>
+        <option value="cl_002">Bombo Clart</option>
+        <!-- Populate dynamically if needed -->
+    </select><br><br>
+
+    <!-- Exercises Table -->
+    <h3>Exercises</h3>
+    <table id="exerciseTable" border="1" cellpadding="5">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Sets</th>
+                <th>Reps</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be added here dynamically -->
+        </tbody>
+    </table>
+    <button type="button" onclick="addExerciseRow()">Add Exercise</button><br><br>
+
+    <button type="submit">Save Template</button>
+</form>
+
+<script>
+// Add a new empty row to the exercises table
+function addExerciseRow() {
+    const tbody = document.getElementById('exerciseTable').querySelector('tbody');
+    const row = document.createElement('tr');
+
+    row.innerHTML = `
+        <td><input type="text" class="exercise-name" required></td>
+        <td><input type="number" class="exercise-sets" min="1" required></td>
+        <td><input type="number" class="exercise-reps" min="1" required></td>
+        <td><input type="text" class="exercise-notes"></td>
+    `;
+
+    tbody.appendChild(row);
+}
+
+
+
+// Gather exercise data from table
+function getExercises() {
+    const rows = document.querySelectorAll('#exerciseTable tbody tr');
+    const exercises = [];
+
+    rows.forEach(row => {
+        const name = row.querySelector('.exercise-name').value;
+        const sets = parseInt(row.querySelector('.exercise-sets').value);
+        const reps = parseInt(row.querySelector('.exercise-reps').value);
+        const notes = row.querySelector('.exercise-notes').value;
+
+        if (name && sets && reps) {
+            exercises.push({ name, sets, reps, notes });
+        }
+    });
+
+    return exercises;
+}
+
+// Add template function (calls server)
+function addTemplate() {function addTemplate() {
+    var templateData = {};
+    templateData.name = document.getElementById("templateName").value.trim();
+    templateData.exercises = getExercises(); // Build from dynamic table rows
+    templateData.coachId = sessionStorage.getItem('coachId');
+    templateData.clientId = document.getElementById("clientSelect")?.value || null;
+
+    if (!templateData.name || templateData.exercises.length === 0) {
+        alert('Template name and at least one exercise are required!');
+        return;
+    }
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "/api/add-workout-template", true);
+    request.setRequestHeader('Content-Type', 'application/json');
+
+    request.onload = function () {
+        let response;
+        try {
+            response = JSON.parse(request.responseText);
+        } catch (e) {
+            console.error('[TEMPLATE-FRONTEND-FIX] Invalid JSON response:', request.responseText);
+            alert('Server error saving template.');
+            return;
+        }
+
+        console.log('[TEMPLATE-FRONTEND-FIX]', response);
+
+        if (!response.message) {
+            alert('Added Template: ' + templateData.name + '!');
+
+            // Clear form
+            document.getElementById("templateName").value = "";
+            document.getElementById("clientSelect").value = "";
+            document.querySelector('#exerciseTable tbody').innerHTML = '';
+
+        } else {
+            alert('Unable to add template!');
+        }
+    };
+
+    request.send(JSON.stringify(templateData));
+}
+
+    var templateData = {};
+    templateData.name = document.getElementById("templateName").value;
+    templateData.exercises = getExercises();
+    templateData.coachId = sessionStorage.getItem('coachId');
+    templateData.clientId = document.getElementById("clientSelect").value || null;
+
+    if (!templateData.name || templateData.exercises.length === 0) {
+        alert('Template name and at least one exercise are required!');
+        return;
+    }
+
+    var request = new XMLHttpRequest();
+    request.open("POST", "/api/add-workout-template", true);
+    request.setRequestHeader('Content-Type', 'application/json');
+
+    request.onload = function () {
+        var response = JSON.parse(request.responseText);
+        console.log(response);
+
+        if (!response.message) {
+            alert('Added Template: ' + templateData.name + '!');
+            document.getElementById("templateName").value = "";
+            document.getElementById("clientSelect").value = "";
+            document.querySelector('#exerciseTable tbody').innerHTML = '';
+        } else {
+            alert('Unable to add template!');
+        }
+    };
+
+    request.send(JSON.stringify(templateData));
+}
+</script>
+
+</body>
+</html>
