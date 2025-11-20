@@ -1,10 +1,7 @@
-// public/js/sufian.js
-
-// single main function, triggered by the Save button
 function saveWorkout() {
   const daySelect = document.getElementById("daySelect");
   const day = daySelect.value;
-  const exercises = collectExercises(); // from sufian-helpers.js
+  const exercises = collectExercises(); 
 
   if (!day) {
     alert("Please select a day.");
@@ -20,7 +17,7 @@ function saveWorkout() {
 
   const payload = {
     clientId,
-    week_start_date: getMondayISO(new Date()), // helper
+    week_start_date: getMondayISO(new Date()), 
     day,
     exercises
   };
@@ -33,7 +30,7 @@ function saveWorkout() {
     .then((res) => res.json())
     .then((data) => {
       if (data && data.success) {
-        showModal(); // helper
+        showModal(); 
       } else {
         alert("Workout saved to database, but server did not return success.");
       }

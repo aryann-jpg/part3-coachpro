@@ -1,16 +1,12 @@
-// public/js/sufian-helpers.js
-
-// --- compute Monday of current week (ISO yyyy-mm-dd) ---
 function getMondayISO(date) {
   const d = new Date(date);
-  const day = d.getUTCDay(); // 0 = Sun ... 6 = Sat
-  const diff = day === 0 ? -6 : 1 - day; // shift so Monday is start
+  const day = d.getUTCDay(); 
+  const diff = day === 0 ? -6 : 1 - day; 
   d.setUTCDate(d.getUTCDate() + diff);
   d.setUTCHours(0, 0, 0, 0);
   return d.toISOString().split("T")[0];
 }
 
-// --- add one editable row ---
 function addExerciseRow() {
   const exerciseTbody = document.getElementById("exerciseTbody");
   const tr = document.createElement("tr");
@@ -23,7 +19,6 @@ function addExerciseRow() {
   exerciseTbody.appendChild(tr);
 }
 
-// --- collect all rows into an array of exercises ---
 function collectExercises() {
   const exerciseTbody = document.getElementById("exerciseTbody");
   const rows = exerciseTbody.querySelectorAll("tr");
@@ -40,7 +35,7 @@ function collectExercises() {
   return out;
 }
 
-// --- modal helpers ---
+
 function showModal() {
   const savedModal = document.getElementById("savedModal");
   savedModal.classList.remove("hidden");
@@ -58,12 +53,9 @@ function doneAdding() {
   window.location.href = "/index.html";
 }
 
-// --- initial page setup (no event listeners) ---
 function initWorkoutPage() {
-  // first row
   addExerciseRow();
 
-  // show client name
   const params = new URLSearchParams(window.location.search);
   const clientId = params.get("clientId");
   const clientNameDisplay = document.getElementById("clientNameDisplay");

@@ -13,35 +13,26 @@ async function handleLogin(event) {
             body: JSON.stringify({ username, password })
         });
 
-        // Backend Integration: Handle the response status
-        if (response.ok) { // Status 200 OK
+        if (response.ok) { 
             const data = await response.json();
-            
-            // In a real application, you would store data.token (JWT) here.
             console.log('Login Successful. Token received:', data.token);
             
-            // --- NEW: Store the token and coachId in Session Storage ---
             sessionStorage.setItem('authToken', data.token);
             sessionStorage.setItem('coachId', data.coachId);
-            // -----------------------------------------------------------
             
             showSuccessMessage();
-            
-            // --- UPDATED: Redirect to the dashboard page ---
-            // We use a small timeout to let the user see the "Access Granted" message.
+
             setTimeout(() => {
                  window.location.href = '/index.html'; 
             }, 1000); 
-            // ------------------------------------------------
 
-        } else if (response.status === 401) { // Error Case 1: Unauthorized (Invalid Credentials)
+        } else if (response.status === 401) { 
             showErrorMessage('Invalid username or password. Please check your credentials.');
 
-        } else if (response.status === 500) { // Error Case 2: Server Error
+        } else if (response.status === 500) { 
             showErrorMessage('A server error occurred. Please try again later.');
 
         } else {
-            // General failure case
             const errorData = await response.json().catch(() => ({ message: 'Login failed due to unknown error.' }));
             showErrorMessage(errorData.message || 'Login failed.');
         }
@@ -52,7 +43,6 @@ async function handleLogin(event) {
     }
 }
 
-// Function to update the UI on successful login
 function showSuccessMessage() {
     const form = document.getElementById('loginForm');
     form.innerHTML = `
@@ -66,7 +56,6 @@ function showSuccessMessage() {
     `;
 }
 
-// Function to display an error message
 function showErrorMessage(message) {
     const errorMessage = document.getElementById('errorMessage');
     errorMessage.textContent = message;

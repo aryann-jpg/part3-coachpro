@@ -1,42 +1,33 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require("body-parser");
-const crypto = require('crypto'); // Import the crypto module for unique tokens
-const { authenticateCoach, getClientsByCoachId } = require('./utils/authentication.js'); // Utility functions
+const crypto = require('crypto');
+const { authenticateCoach, getClientsByCoachId } = require('./utils/authentication.js'); 
 const { addWorkoutForClient } = require('./utils/SufianUtil.js');
 const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-// Middleware for parsing request bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files from the 'public' folder
-// Default route serves login.html instead of index.html
 app.use(express.static(path.join(__dirname, 'public'), { index: 'login.html' }));
 
-// ✅ NEW: Serve the coaching-data.json file from the utils folder (read-only access)
 app.get('/data/coaching-data.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'utils', 'coaching-data.json'));
 });
 
-// --- API ROUTES ---
-
-// 1. Authentication Route
 app.post('/api/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     
-    // Call your utility function for authentication
     const coach = await authenticateCoach(username, password);
 
-    // Respond with coach details and a unique session token
     res.status(200).json({
       message: "Login successful",
       coachId: coach.coachId,
-      token: crypto.randomUUID() // Generate secure random token
+      token: crypto.randomUUID() 
     });
 
   } catch (error) {
@@ -50,7 +41,6 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// 2. Client Fetching Route for Dashboard
 app.get('/api/clients/:coachId', async (req, res) => {
   try {
     const coachId = req.params.coachId;
@@ -80,7 +70,7 @@ app.post('/add-workout', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing fields' });
 
     await addWorkoutForClient({ clientId, week_start_date, day, exercises });
-    res.json({ success: true }); // ✅ Always return JSON
+    res.json({ success: true }); 
   } catch (err) {
     console.error('Add workout error:', err);
     res.status(500).json({ success: false, message: err.message });

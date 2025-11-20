@@ -1,16 +1,12 @@
-// --- Dashboard Client Logic ---
-
 const coachId = sessionStorage.getItem('coachId');
 const authToken = sessionStorage.getItem('authToken');
 const workoutDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-// DOM Elements
 const workoutPlanSection = document.getElementById('workoutPlanSection');
 const clientPlanName = document.getElementById('clientPlanName');
 const workoutWeekContainer = document.getElementById('workoutWeekContainer');
 const createNewPlanButton = document.getElementById('createNewPlanButton');
 
-// ✅ Redirect to Create Workout page (use your actual filename)
 function createNewWorkoutPlan() {
   const createNewPlanButton = document.getElementById('createNewPlanButton');
   const clientId = createNewPlanButton?.dataset.clientId;
@@ -26,7 +22,6 @@ function createNewWorkoutPlan() {
 
 let selectedClientCard = null;
 
-// (optional) auth redirect disabled for dev
 if (!coachId || !authToken) {
   // window.location.href = '/login.html';
 }
@@ -34,10 +29,9 @@ if (!coachId || !authToken) {
 function logoutCoach() {
   sessionStorage.removeItem('coachId');
   sessionStorage.removeItem('authToken');
-  // window.location.href = '/login.html';
+  window.location.href = '/login.html';
 }
 
-// Show the weekly plan scaffold then populate from file
 function showClientWorkoutPlan(clientName, clientId) {
   clientPlanName.textContent = clientName;
 
@@ -64,7 +58,6 @@ function showClientWorkoutPlan(clientName, clientId) {
   populateClientWorkouts(clientId);
 }
 
-// Read coaching-data.json and fill day boxes
 function populateClientWorkouts(clientId) {
   fetch('/data/coaching-data.json')
     .then(res => res.json())
@@ -76,7 +69,7 @@ function populateClientWorkouts(clientId) {
 
       workoutDays.forEach(day => {
         const box = workoutWeekContainer.querySelector(`[data-day="${day}"] .empty-content`);
-        const exercises = clientWorkouts.plan[day]; // <-- array of { workout_name, sets, reps, weight }
+        const exercises = clientWorkouts.plan[day]; 
 
         if (Array.isArray(exercises) && exercises.length > 0) {
           box.innerHTML = `
