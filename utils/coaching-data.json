@@ -127,10 +127,10 @@
         ],
         "Thursday": [
           {
-            "workout_name": "Rest Day",
-            "sets": "",
-            "reps": "",
-            "weight": ""
+            "workout_name": "Rest Dayzz",
+            "sets": "1",
+            "reps": "1",
+            "weight": "1"
           }
         ],
         "Friday": [],

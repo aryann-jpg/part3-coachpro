@@ -12,5 +12,19 @@
     ],
     "coachId": "c001",
     "clientId": null
+  },
+  {
+    "templateId": "t_1763621963423",
+    "name": "1",
+    "exercises": [
+      {
+        "name": "1",
+        "sets": 1,
+        "reps": 1,
+        "notes": "1"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": null
   }
 ]
