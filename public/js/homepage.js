@@ -8,18 +8,10 @@ const clientPlanName = document.getElementById('clientPlanName');
 const workoutWeekContainer = document.getElementById('workoutWeekContainer');
 const createNewPlanButton = document.getElementById('createNewPlanButton');
 
-let selectedClientCard = null;
-
-// --- Logout ---
-function logoutCoach() {
-  sessionStorage.removeItem('coachId');
-  sessionStorage.removeItem('authToken');
-  // window.location.href = '/login.html';
-}
-
-// --- Create New Plan ---
 function createNewWorkoutPlan() {
+  const createNewPlanButton = document.getElementById('createNewPlanButton');
   const clientId = createNewPlanButton?.dataset.clientId;
+
   if (clientId) {
     sessionStorage.setItem('selectedClientId', clientId);
     window.location.href = '/sufian-create.html?clientId=' + encodeURIComponent(clientId);
@@ -28,7 +20,19 @@ function createNewWorkoutPlan() {
   }
 }
 
-// --- Show Client Workout Plan ---
+
+let selectedClientCard = null;
+
+if (!coachId || !authToken) {
+  // window.location.href = '/login.html';
+}
+
+function logoutCoach() {
+  sessionStorage.removeItem('coachId');
+  sessionStorage.removeItem('authToken');
+  window.location.href = '/login.html';
+}
+
 function showClientWorkoutPlan(clientName, clientId) {
   clientPlanName.textContent = clientName;
 
@@ -40,14 +44,11 @@ function showClientWorkoutPlan(clientName, clientId) {
 
   workoutDays.forEach(day => {
     const dayBox = document.createElement('div');
-    dayBox.className = 'day-box cursor-pointer hover:bg-indigo-50 transition rounded-lg border border-gray-200 p-3';
+    dayBox.className = 'day-box';
     dayBox.dataset.day = day;
-    dayBox.onclick = function () {
-      window.location.href = `/edit-workout.html?clientId=${encodeURIComponent(clientId)}&day=${encodeURIComponent(day)}`;
-    };
     dayBox.innerHTML = `
-      <h3 class="day-title font-semibold text-indigo-700">${day}</h3>
-      <div class="empty-content text-gray-500">Empty!</div>
+      <h3 class="day-title">${day}</h3>
+      <div class="empty-content">Empty!</div>
     `;
     workoutWeekContainer.appendChild(dayBox);
   });
@@ -58,20 +59,18 @@ function showClientWorkoutPlan(clientName, clientId) {
   populateClientWorkouts(clientId);
 }
 
-// --- Load workout data from JSON ---
 function populateClientWorkouts(clientId) {
   fetch('/data/coaching-data.json')
     .then(res => res.json())
     .then(data => {
       const clientWorkouts = (data.workouts || [])
-        .filter(w => w.clientId === clientId)
-        .sort((a, b) => new Date(b.week_start_date) - new Date(a.week_start_date))[0];
-
+        .find(w => w.clientId === clientId);
       if (!clientWorkouts || !clientWorkouts.plan) return;
 
       workoutDays.forEach(day => {
         const box = workoutWeekContainer.querySelector(`[data-day="${day}"] .empty-content`);
-        const exercises = clientWorkouts.plan[day];
+        const exercises = clientWorkouts.plan[day]; 
+
         if (Array.isArray(exercises) && exercises.length > 0) {
           box.innerHTML = `
             <ul class="text-sm list-disc ml-4 text-gray-700">
@@ -86,10 +85,10 @@ function populateClientWorkouts(clientId) {
     .catch(err => console.error('Error loading workouts:', err));
 }
 
-// --- Create Client Card ---
 function createClientCard(client) {
   const card = document.createElement('div');
   card.className = 'client-card';
+
   card.onclick = () => {
     if (selectedClientCard) selectedClientCard.classList.remove('selected');
     card.classList.add('selected');
@@ -98,19 +97,21 @@ function createClientCard(client) {
   };
 
   const imageUrl = client.profile_image_url || 'https://placehold.co/100x100/A0A0A0/FFFFFF?text=PFP';
+
   card.innerHTML = `
     <div class="profile-placeholder">
-      <img src="${imageUrl}" alt="Profile photo of ${client.name}" 
+      <img src="${imageUrl}" 
+        alt="Profile photo of ${client.name}" 
         class="w-full h-full object-cover rounded-full"
         onerror="this.onerror=null; this.src='https://placehold.co/100x100/A0A0A0/FFFFFF?text=PFP';" />
     </div>
     <p class="client-name">${client.name}</p>
     <p class="client-link">View Plan</p>
   `;
+
   return card;
 }
 
-// --- Load Dashboard Data ---
 async function loadDashboardData() {
   const clientGrid = document.getElementById('clientGrid');
   const loadingIndicator = document.getElementById('loadingIndicator');
@@ -122,7 +123,10 @@ async function loadDashboardData() {
     const data = await response.json();
 
     const coachNameDisplay = document.getElementById('coachNameDisplay');
-    const firstName = data.coaches?.[0]?.full_name?.split(' ')[0] || 'Coach';
+    const firstName =
+      data.coaches && data.coaches[0] && data.coaches[0].full_name
+        ? data.coaches[0].full_name.split(' ')[0]
+        : 'Coach';
     coachNameDisplay.textContent = firstName + ',';
 
     const addClientCard = document.querySelector('.add-client-card');
@@ -135,7 +139,8 @@ async function loadDashboardData() {
       });
     } else {
       const noClientsMessage = document.createElement('div');
-      noClientsMessage.className = 'col-span-full text-center p-8 bg-white rounded-xl shadow-md text-gray-500';
+      noClientsMessage.className =
+        'col-span-full text-center p-8 bg-white rounded-xl shadow-md text-gray-500';
       noClientsMessage.textContent = 'No active clients found. Time to add one!';
       clientGrid.insertBefore(noClientsMessage, addClientCard);
     }

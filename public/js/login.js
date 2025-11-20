@@ -37,7 +37,6 @@ async function handleLogin(event) {
             showErrorMessage('A server error occurred. Please try again later.');
  
         } else {
-            // General failure case
             const errorData = await response.json().catch(() => ({ message: 'Login failed due to unknown error.' }));
             showErrorMessage(errorData.message || 'Login failed.');
         }

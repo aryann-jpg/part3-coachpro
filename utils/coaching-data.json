@@ -17,8 +17,6 @@
       "coachId": "c001",
       "name": "Sarah Chen",
       "goal": "Build functional strength and endurance.",
-      "start_date": "2024-09-01",
-      "last_checkin": "2025-11-09",
       "profile_image_url": "images/sarah_chen.jpg"
     },
     {
@@ -26,8 +24,6 @@
       "coachId": "c001",
       "name": "Bombo Clart",
       "goal": "Build functional strength and endurance.",
-      "start_date": "2024-09-01",
-      "last_checkin": "2025-11-09",
       "profile_image_url": "images/bombo_clart.jpg"
     }
   ],
@@ -35,7 +31,6 @@
     {
       "workoutId": "wk001",
       "clientId": "cl_001",
-      "week_start_date": "2025-11-10",
       "plan": {
         "Monday": [
           {
@@ -75,7 +70,6 @@
     {
       "workoutId": "wk1762973732984172",
       "clientId": "cl_002",
-      "week_start_date": "2025-11-10",
       "plan": {
         "Monday": [
           {
@@ -144,25 +138,57 @@
           }
         ]
       }
-    }
-  ],
-  "templates": [
+    },
     {
-      "templateId": "t_001",
-      "name": "Sample Strength Template (Yi Xuan's Feature)",
-      "exercises": [
-        {
-          "name": "Deadlifts",
-          "sets": 3,
-          "reps": 5,
-          "notes": "Warm up thoroughly."
-        },
-        {
-          "name": "Overhead Press",
-          "sets": 3,
-          "reps": 8
-        }
-      ]
+      "workoutId": "wk1762973732984172",
+      "clientId": "cl_002",
+      "plan": {
+        "Monday": [
+          {
+            "workout_name": "Bench Press",
+            "sets": 3,
+            "reps": 15,
+            "weight": 50
+          },
+          {
+            "workout_name": "Lateral Raises",
+            "sets": 3,
+            "reps": 15,
+            "weight": 5
+          },
+          {
+            "workout_name": "Tricep Pushdowns",
+            "sets": 3,
+            "reps": 15,
+            "weight": 25
+          }
+        ],
+        "Tuesday": [
+          {
+            "workout_name": "Weighted Pull-ups",
+            "sets": 3,
+            "reps": 10,
+            "weight": 10
+          },
+          {
+            "workout_name": "Bent-over Rows",
+            "sets": 3,
+            "reps": 15,
+            "weight": 15
+          },
+          {
+            "workout_name": "Bicep Curls",
+            "sets": 3,
+            "reps": 12,
+            "weight": 25
+          }
+        ],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
+      }
     }
   ]
 }
