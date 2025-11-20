@@ -6,38 +6,54 @@
     <title>Edit Workout Plan | CoachPro</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="css/edit.css" />
 </head>
+
 <body class="bg-gray-50 min-h-screen flex flex-col" onload="loadClientWorkout()">
 
+    <!-- NAVIGATION -->
     <nav class="bg-white shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <h1 class="text-xl font-semibold text-indigo-600">CoachPro</h1>
+
+            <!-- Calls goBack() which is defined inside loadClientWorkout() -->
             <button onclick="goBack()" class="text-gray-600 hover:text-indigo-600 transition">← Back to Dashboard</button>
         </div>
     </nav>
 
+    <!-- MAIN CONTENT -->
     <main class="flex-grow max-w-4xl mx-auto p-6">
-        <h2 class="text-2xl font-bold mb-6">Edit Workout Plan for <span id="clientName" class="text-indigo-600"></span></h2>
+        <h2 class="text-2xl font-bold mb-6">
+            Edit Workout Plan for 
+            <span id="clientName" class="text-indigo-600"></span>
+        </h2>
 
         <div id="dayWorkoutContainer" class="space-y-6">
-            <h3 id="currentDayTitle" class="text-xl font-bold text-gray-800 mb-3">Loading Day...</h3>
-            
-            <form id="editWorkoutForm" onsubmit="saveWorkoutPlan(event)" class="space-y-6">
-                
-                <div id="exerciseList" class="space-y-2">
-                    </div>
 
+            <h3 id="currentDayTitle" class="text-xl font-bold text-gray-800 mb-3">
+                Loading Day...
+            </h3>
+
+            <!-- FORM -->
+            <form id="editWorkoutForm" onsubmit="saveWorkoutPlan(event)" class="space-y-6">
+
+                <!-- Exercise rows go here -->
+                <div id="exerciseList" class="space-y-2"></div>
+
+                <!-- BUTTONS -->
                 <div class="flex justify-end gap-4 pt-4">
-                    <button type="button" onclick="resetForm()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">Reset</button>
-                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Save Changes</button>
+                    <button type="button" onclick="resetForm()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
+                        Reset
+                    </button>
+
+                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">
+                        Save Changes
+                    </button>
                 </div>
             </form>
         </div>
         <p id="saveStatus" class="mt-6 text-center text-sm text-gray-600"></p>
     </main>
-
     <script src="js/aryan.js"></script>
 </body>
 </html>
