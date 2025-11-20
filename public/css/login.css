@@ -1,0 +1,11 @@
+/* Apply smooth transitions to interactive elements for the primary button */
+.btn-primary {
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for the primary button to make it lift and have shadow */
+.btn-primary:hover {
+    transform: translateY(-2px);
+    /* Color code 4F46E5 is Tailwind Indigo 600 */
+    box-shadow: 0 4px 15px -3px rgba(79, 70, 229, 0.4); 
+}

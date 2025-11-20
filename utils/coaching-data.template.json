@@ -1,0 +1,69 @@
+{
+  "coaches": [
+    {
+      "coachId": "c001",
+      "username": "coach_alex",
+      "hashed_password": "securely_hashed_password_placeholder", 
+      "full_name": "Alex Johnson",
+      "client_ids": ["cl_001","cl_002"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "cl_001",
+      "coachId": "c001",
+      "name": "Sarah Chen",
+      "goal": "Build functional strength and endurance.",
+      "start_date": "2024-09-01",
+      "last_checkin": "2025-11-09"
+    },
+    {
+      "clientId": "cl_002",
+      "coachId": "c001",
+      "name": "Bombo Clart",
+      "goal": "Build functional strength and endurance.",
+      "start_date": "2024-09-01",
+      "last_checkin": "2025-11-09"
+    }
+  ],
+  "workouts": [
+    {
+      "workoutId": "wk001",
+      "clientId": "cl_001",
+      "week_start_date": "2025-11-10",
+      "plan": {
+        "Monday": {
+          "title": "Full Body Strength A",
+          "status": "pending",
+          "exercises": [
+            {"name": "Squats", "sets": 3, "reps": 8, "notes": "Focus on depth."},
+            {"name": "Bench Press", "sets": 3, "reps": 8, "notes": "Controlled movement."},
+            {"name": "Bent-Over Rows", "sets": 3, "reps": 10, "notes": "Light weight, strict form."}
+          ]
+        },
+        "Tuesday": {"title": "Rest/Active Recovery", "status": "pending", "exercises": []},
+        "Wednesday": {
+          "title": "Endurance Run",
+          "status": "pending",
+          "exercises": [
+            {"name": "Run", "distance": "5km", "time_goal": "30:00"}
+          ]
+        },
+        "Thursday": {"title": "Full Body Strength B", "status": "pending", "exercises": []},
+        "Friday": {"title": "Core and Mobility", "status": "pending", "exercises": []},
+        "Saturday": {"title": "Rest", "status": "pending", "exercises": []},
+        "Sunday": {"title": "Rest", "status": "pending", "exercises": []}
+      }
+    }
+  ],
+  "templates": [
+    {
+      "templateId": "t_001",
+      "name": "Sample Strength Template (Yi Xuan's Feature)",
+      "exercises": [
+        {"name": "Deadlifts", "sets": 3, "reps": 5, "notes": "Warm up thoroughly."},
+        {"name": "Overhead Press", "sets": 3, "reps": 8}
+      ]
+    }
+  ]
+}
