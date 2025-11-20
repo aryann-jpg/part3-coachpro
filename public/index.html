@@ -8,7 +8,7 @@
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="css/styles.css">
-
+ 
 <!-- Tailwind Config -->
 <script>
 tailwind.config = {
@@ -16,100 +16,124 @@ tailwind.config = {
     extend: {
       fontFamily: { sans: ['Inter', 'sans-serif'] },
       colors: {
-        'primary': '#4F46E5', // Indigo 600
-        'secondary': '#10B981', // Emerald 500
-        'background': '#F9FAFB', // Gray 50
+        'primary': '#4F46E5',
+        'secondary': '#10B981',
+        'background': '#F9FAFB',
       }
     }
   }
 }
 </script>
 </head>
-
+ 
 <body class="bg-gray-50 min-h-screen" onload="loadDashboardData()">
+ 
   <!-- Navbar -->
   <nav class="bg-white shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
+       
+        <!-- Logo -->
         <div class="flex items-center">
-          <div class="logo">
-            <span class="logo-box">CP</span> CoachPro
+          <div class="logo font-bold text-xl text-primary flex items-center">
+            <span class="px-3 py-1 border border-primary rounded-lg mr-2">CP</span>
+            CoachPro
           </div>
         </div>
-
+ 
+        <!-- NEW: Workout Plan Section (Hidden by default) -->
         <div class="flex items-center space-x-4">
           <a href="#" class="nav-link active">Home page</a>
-          <button id="logoutButton" onclick="logoutCoach()" class="nav-link text-red-600 hover:text-white hover:bg-red-500">
+          <button id="logoutButton" onclick="logoutCoach()"
+                  class="nav-link text-red-600 hover:text-white hover:bg-red-500 py-2 px-4 rounded-md">
             Logout
           </button>
         </div>
+ 
       </div>
     </div>
   </nav>
-
-  <!-- Hero -->
+ 
+  <!-- Hero Section -->
   <header class="hero">
     <div class="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-      <h1 class="hero-title">
+      <h1 class="hero-title text-4xl font-bold text-white-800">
         Welcome <span id="coachNameDisplay" class="font-bold tracking-wider">Loading...</span>
       </h1>
-      <p class="hero-subtitle">Ready to plan some amazing training sessions today?</p>
+      <p class="hero-subtitle text-white-600 mt-2">
+        Ready to plan some amazing training sessions today?
+      </p>
     </div>
   </header>
-
-  <!-- Main -->
+ 
+  <!-- Main Content -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-    <h2 class="section-title">Clients:</h2>
-
+   
+    <!-- Clients Title -->
+    <h2 class="section-title text-2xl font-bold mt-4 mb-6">Clients:</h2>
+ 
     <!-- Client Grid -->
-    <div id="clientGrid" class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <div id="clientGrid"
+         class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+ 
       <div id="loadingIndicator" class="text-gray-500 p-4 text-center col-span-full">
         <p>Fetching your client list...</p>
       </div>
-
+ 
       <!-- Add Client Card -->
-      <div class="add-client-card">
-        <div class="text-center text-gray-500">
-          <svg class="w-8 h-8 mx-auto mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 
-              0a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          <p class="font-medium">Add New Client</p>
-        </div>
+      <div class="add-client-card cursor-pointer rounded-xl bg-white shadow-md p-6 flex flex-col justify-center items-center hover:bg-gray-100 transition">
+        <svg class="w-8 h-8 mx-auto mb-1 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 9v3m0 0v3m0-3h3m-3 0H9m12
+            0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <p class="font-medium text-gray-500">Add New Client</p>
       </div>
+ 
     </div>
-
-    <!-- Workout Plan Section -->
+ 
+ 
+    <!-- Workout Plan Section (ONLY ONE COPY) -->
     <section id="workoutPlanSection" class="mt-16 hidden">
       <div class="flex justify-between items-center mb-6">
-        <h2 class="section-title mb-0">
+ 
+        <h2 class="section-title text-2xl font-bold mb-0">
           Workout Plan for <span id="clientPlanName" class="text-primary font-bold"></span>
         </h2>
-
-                         <!-- NEW: Create Workout Template Button -->
-                <button id="createWorkoutTemplateButton" 
-                        class="flex items-center text-primary hover:text-indigo-700 font-medium transition"
-                        onclick="window.location.href='workoutTemplate.utils.html'">
-                    Create Workout Template
-                    <svg class="w-8 h-8 ml-2 p-1 bg-primary/10 rounded-full text-primary hover:bg-primary/20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15M4.5 12h15"/>
-                    </svg>
-                </button>
-
-        <button id="createNewPlanButton" onclick="createNewWorkoutPlan()" class="flex items-center text-primary hover:text-indigo-700 font-medium transition">
-          Create a new workout plan 
-          <svg class="w-8 h-8 ml-2 p-1 bg-primary/10 rounded-full text-primary hover:bg-primary/20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+ 
+        <!-- Create Workout Template -->
+        <button id="createWorkoutTemplateButton"
+                class="flex items-center text-primary hover:text-indigo-700 font-medium transition"
+                onclick="window.location.href='workoutTemplate.utils.html'">
+          Create Workout Template
+          <svg class="w-8 h-8 ml-2 p-1 bg-primary/10 rounded-full text-primary hover:bg-primary/20"
+               fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15M4.5 12h15"/>
           </svg>
         </button>
+ 
+        <!-- Create New Workout Plan -->
+        <button id="createNewPlanButton"
+                onclick="createNewWorkoutPlan()"
+                class="flex items-center text-primary hover:text-indigo-700 font-medium transition">
+          Create a new workout plan
+          <svg class="w-8 h-8 ml-2 p-1 bg-primary/10 rounded-full text-primary hover:bg-primary/20"
+               fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15M4.5 12h15"/>
+          </svg>
+        </button>
+ 
       </div>
-
+ 
       <!-- Weekly Plan Grid -->
-      <div id="workoutWeekContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4"></div>
+      <div id="workoutWeekContainer"
+           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+      </div>
+ 
     </section>
+ 
   </main>
-
+ 
   <script src="js/homepage.js"></script>
 </body>
 </html>

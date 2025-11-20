@@ -1,4 +1,3 @@
-// utils/AryanUtil.js
 function initEditWorkoutPage() {
     const params = new URLSearchParams(window.location.search);
     const clientId = params.get("client");
@@ -26,7 +25,6 @@ function initEditWorkoutPage() {
                 return;
             }
 
-            // Single inline table renderer
             tableContainer.innerHTML = `
                 <table class="w-full text-left border">
                     <thead>

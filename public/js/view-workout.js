@@ -1,4 +1,3 @@
-// public/js/view-workout.js
 function viewWorkoutDetails() {
     const urlParams = new URLSearchParams(window.location.search);
     const clientId = urlParams.get("clientId");

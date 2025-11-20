@@ -26,5 +26,33 @@
     ],
     "coachId": "c001",
     "clientId": null
+  },
+  {
+    "templateId": "t_1763623963831",
+    "name": "sufianing",
+    "exercises": [
+      {
+        "name": "1",
+        "sets": 1,
+        "reps": 1,
+        "notes": "1"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": null
+  },
+  {
+    "templateId": "t_1763624540703",
+    "name": "Strength",
+    "exercises": [
+      {
+        "name": "Bench Press",
+        "sets": 3,
+        "reps": 25,
+        "notes": "Do till failure"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": "cl_002"
   }
 ]

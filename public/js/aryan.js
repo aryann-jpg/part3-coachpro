@@ -1,5 +1,3 @@
-// public/js/aryan.js
-
 function loadClientWorkout() {
     // --- URL Params ---
     const urlParams = new URLSearchParams(window.location.search);
