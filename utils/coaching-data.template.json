@@ -54,5 +54,19 @@
     ],
     "coachId": "c001",
     "clientId": "cl_002"
+  },
+  {
+    "templateId": "t_1763625123979",
+    "name": "Hypertrophy",
+    "exercises": [
+      {
+        "name": "Leg press",
+        "sets": 2,
+        "reps": 20,
+        "notes": "Do till failure"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": null
   }
 ]
