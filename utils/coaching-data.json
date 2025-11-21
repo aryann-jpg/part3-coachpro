@@ -117,6 +117,12 @@
             "sets": "",
             "reps": "",
             "weight": ""
+          },
+          {
+            "workout_name": "Military Press",
+            "sets": 2,
+            "reps": 12,
+            "weight": 20
           }
         ],
         "Thursday": [
@@ -127,10 +133,10 @@
             "weight": "1"
           },
           {
-            "workout_name": "JKKKK",
-            "sets": 2,
-            "reps": 12,
-            "weight": 20
+            "workout_name": "Serious",
+            "sets": "2",
+            "reps": "12",
+            "weight": "20"
           }
         ],
         "Friday": [

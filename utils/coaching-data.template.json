@@ -110,5 +110,19 @@
     ],
     "coachId": "c001",
     "clientId": "cl_002"
+  },
+  {
+    "templateId": "t_1763766809054",
+    "name": "main",
+    "exercises": [
+      {
+        "name": "Lateral raises",
+        "sets": 3,
+        "reps": 20,
+        "notes": "Lightweight first"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": "cl_002"
   }
 ]
