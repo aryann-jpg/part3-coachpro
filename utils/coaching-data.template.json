@@ -68,5 +68,47 @@
     ],
     "coachId": "c001",
     "clientId": null
+  },
+  {
+    "templateId": "t_1763629872344",
+    "name": "try",
+    "exercises": [
+      {
+        "name": "Squats",
+        "sets": 2,
+        "reps": 20,
+        "notes": "Do till failure"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": "cl_002"
+  },
+  {
+    "templateId": "t_1763631101315",
+    "name": "why",
+    "exercises": [
+      {
+        "name": "serious",
+        "sets": 2,
+        "reps": 3,
+        "notes": "try harder"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": "cl_001"
+  },
+  {
+    "templateId": "t_1763747724082",
+    "name": "lessgoo",
+    "exercises": [
+      {
+        "name": "squats",
+        "sets": 3,
+        "reps": 12,
+        "notes": "Try your best"
+      }
+    ],
+    "coachId": "c001",
+    "clientId": "cl_002"
   }
 ]

@@ -1,0 +1,14 @@
+# Normalize all text files to LF for cross-platform compatibility
+* text=auto eol=lf
+
+# Handle JavaScript, HTML, CSS, and JSON as text so diffs are readable
+*.js text
+*.html text
+*.css text
+*.json text
+
+# Treat images as binary (Git should not diff them)
+public/images/* binary
+
+# Do not diff node_modules
+node_modules/* -diff

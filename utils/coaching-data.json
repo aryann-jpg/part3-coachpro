@@ -125,6 +125,12 @@
             "sets": "1",
             "reps": "1",
             "weight": "1"
+          },
+          {
+            "workout_name": "JKKKK",
+            "sets": 2,
+            "reps": 12,
+            "weight": 20
           }
         ],
         "Friday": [
@@ -133,12 +139,24 @@
             "sets": "55",
             "reps": "2",
             "weight": "20"
+          },
+          {
+            "workout_name": "Hello",
+            "sets": 3,
+            "reps": 12,
+            "weight": 20
+          },
+          {
+            "workout_name": "Why",
+            "sets": 2,
+            "reps": 12,
+            "weight": 20
           }
         ],
         "Saturday": [
           {
-            "workout_name": "Not again",
-            "sets": "0",
+            "workout_name": "Not againzzzz",
+            "sets": "5",
             "reps": "0",
             "weight": "0"
           }

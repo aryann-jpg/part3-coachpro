@@ -46,7 +46,7 @@ function showClientWorkoutPlan(clientName, clientId) {
     dayBox.className = 'day-box cursor-pointer hover:bg-indigo-50 transition rounded-lg border border-gray-200 p-3';
     dayBox.dataset.day = day;
     dayBox.onclick = function () {
-      window.location.href = `/edit-workout.html?clientId=${encodeURIComponent(clientId)}&day=${encodeURIComponent(day)}`;
+      window.location.href = `/aryan-edit.html?clientId=${encodeURIComponent(clientId)}&day=${encodeURIComponent(day)}`;
     };
     dayBox.innerHTML = `
       <h3 class="day-title font-semibold text-indigo-700">${day}</h3>
