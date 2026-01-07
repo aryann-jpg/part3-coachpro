@@ -5,8 +5,13 @@ async function updateWorkoutPlan(req, res) {
     const clientId = req.params.clientId;
     const { plan } = req.body;
 
-    // Input validation
-    if (!plan || typeof plan !== 'object') {
+    // --- clientId validation ---
+    if (!clientId || typeof clientId !== 'string') {
+        return res.status(400).json({ error: "Invalid clientId." });
+    }
+
+    // --- plan validation ---
+    if (!plan || typeof plan !== 'object' || Array.isArray(plan)) {
         return res.status(400).json({ error: "Missing or invalid 'plan' in request body." });
     }
 
@@ -14,7 +19,7 @@ async function updateWorkoutPlan(req, res) {
         const filePath = path.join(__dirname, 'coaching-data.json');
         const data = JSON.parse(fsSync.readFileSync(filePath, 'utf8'));
 
-        if (!data.workouts) {
+        if (!Array.isArray(data.workouts)) {
             return res.status(500).json({ error: "Workout data structure invalid." });
         }
 
@@ -23,17 +28,37 @@ async function updateWorkoutPlan(req, res) {
             return res.status(404).json({ error: "Client workout not found." });
         }
 
-        // Update plan
+        // --- Validate plan content ---
+        for (const day in plan) {
+            if (!Array.isArray(plan[day])) {
+                return res.status(400).json({ error: `Invalid workout list for ${day}.` });
+            }
+
+            for (const ex of plan[day]) {
+                if (
+                    !ex.workout_name ||
+                    typeof ex.workout_name !== 'string' ||
+                    ex.workout_name.length > 30 ||
+                    ex.sets <= 0 ||
+                    ex.reps <= 0 ||
+                    ex.weight <= 0
+                ) {
+                    return res.status(400).json({
+                        error: `Invalid exercise data detected in ${day}.`
+                    });
+                }
+            }
+        }
+
         workout.plan = plan;
 
-        // Save file
         fsSync.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
 
         return res.json({
             message: "Workout plan updated successfully!",
             plan
         });
-        
+
     } catch (err) {
         console.error("Error saving workout plan:", err);
         return res.status(500).json({ error: "Failed to save workout plan." });

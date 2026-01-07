@@ -10,20 +10,29 @@ function loadClientWorkout() {
     const exerciseListContainer = document.getElementById("exerciseList");
     const saveStatus = document.getElementById("saveStatus");
 
+    // --- URL Validation ---
     if (!clientId || !workoutDay) {
-        alert("Missing clientId or day in URL.");
-        saveStatus.textContent = "Error: Missing clientId or day in URL.";
+        alert("Missing clientId or workout day in URL.");
+        saveStatus.textContent = "Error: Missing URL parameters.";
+        return;
+    }
+
+    if (!/^[a-zA-Z]+$/.test(workoutDay)) {
+        alert("Invalid workout day.");
+        saveStatus.textContent = "Error: Invalid workout day.";
         return;
     }
 
     currentDayTitleEl.textContent = workoutDay;
 
-    // Load coaching-data.json
     fetch("/data/coaching-data.json")
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to load data");
+            return res.json();
+        })
         .then(data => {
-            const client = data.clients.find(c => c.clientId === clientId);
-            const clientWorkouts = (data.workouts || []).find(w => w.clientId === clientId);
+            const client = data.clients?.find(c => c.clientId === clientId);
+            const clientWorkouts = data.workouts?.find(w => w.clientId === clientId);
 
             if (!client || !clientWorkouts) {
                 alert("Client data not found.");
@@ -32,10 +41,10 @@ function loadClientWorkout() {
             }
 
             clientNameEl.textContent = client.name;
+
             const plan = clientWorkouts.plan || {};
             const currentExercises = plan[workoutDay] || [];
 
-            // --- Render Table ---
             exerciseListContainer.innerHTML = `
                 <div class="grid grid-cols-4 gap-2 font-semibold text-gray-600 border-b pb-2">
                     <span>Workout Name</span>
@@ -48,81 +57,90 @@ function loadClientWorkout() {
             currentExercises.forEach(ex => {
                 exerciseListContainer.insertAdjacentHTML("beforeend", `
                     <div class="grid grid-cols-4 gap-2 items-center">
-                        <input type="text" value="${ex.workout_name || ''}" class="border p-2 rounded" />
-                        <input type="number" value="${ex.sets || ''}" class="border p-2 rounded" />
-                        <input type="number" value="${ex.reps || ''}" class="border p-2 rounded" />
-                        <input type="number" value="${ex.weight || ''}" class="border p-2 rounded" />
+                        <input type="text" value="${ex.workout_name || ''}" maxlength="30" class="border p-2 rounded" />
+                        <input type="number" min="1" value="${ex.sets || ''}" class="border p-2 rounded" />
+                        <input type="number" min="1" value="${ex.reps || ''}" class="border p-2 rounded" />
+                        <input type="number" min="1" value="${ex.weight || ''}" class="border p-2 rounded" />
                     </div>
                 `);
             });
 
             // --- Save Workout ---
-            window.saveWorkoutPlan = function(event) {
-                event.preventDefault(); // Prevent form reload
+            window.saveWorkoutPlan = function (event) {
+                event.preventDefault();
+                saveStatus.textContent = "";
 
                 const updatedExercises = [];
                 const rows = Array.from(exerciseListContainer.children).slice(1);
 
                 let hasError = false;
 
-                rows.forEach((r, index) => {
-                    const inputs = r.querySelectorAll("input");
+                rows.forEach((row, index) => {
+                    const inputs = row.querySelectorAll("input");
                     const name = inputs[0].value.trim();
-                    const sets = inputs[1].value.trim();
-                    const reps = inputs[2].value.trim();
-                    const weight = inputs[3].value.trim();
+                    const sets = Number(inputs[1].value);
+                    const reps = Number(inputs[2].value);
+                    const weight = Number(inputs[3].value);
 
-    // --- Validation ---
+                    // --- Validation Rules ---
                     if (!name || !sets || !reps || !weight) {
-                    alert(`Please fill in ALL fields for exercise #${index}.`);
-                    hasError = true;
-                return;
-            }
+                        alert(`All fields must be filled for exercise #${index + 1}`);
+                        hasError = true;
+                        return;
+                    }
 
-            updatedExercises.push({
-                 workout_name: name,
-                 sets,
-                 reps,
-                weight
-            });
-        });
+                    if (name.length > 30) {
+                        alert(`Workout name too long for exercise #${index + 1}`);
+                        hasError = true;
+                        return;
+                    }
 
-    if (hasError) {
-        saveStatus.textContent = "Fix the errors above.";
-        return; // Stop saving
-    }
+                    if (sets <= 0 || reps <= 0 || weight <= 0) {
+                        alert(`Numeric values must be greater than zero (exercise #${index + 1})`);
+                        hasError = true;
+                        return;
+                    }
 
+                    updatedExercises.push({
+                        workout_name: name,
+                        sets,
+                        reps,
+                        weight
+                    });
+                });
 
-                const updatedPlan = { ...plan };
-                updatedPlan[workoutDay] = updatedExercises;
+                if (hasError) {
+                    saveStatus.textContent = "Fix validation errors before saving.";
+                    return;
+                }
+
+                const updatedPlan = { ...plan, [workoutDay]: updatedExercises };
 
                 fetch(`/api/workout/${clientId}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ plan: updatedPlan })
                 })
-                .then(res => {
-                    if (!res.ok) throw new Error("Failed to save workout");
-                    return res.json();
-                })
-                .then(() => {
-                    alert(" Workout Updated!");
-                    saveStatus.textContent = "Saved!";
-                })
-                .catch(() => {
-                    alert(" Error saving workout");
-                    saveStatus.textContent = "Error saving workout";
-                });
+                    .then(res => {
+                        if (!res.ok) throw new Error("Save failed");
+                        return res.json();
+                    })
+                    .then(() => {
+                        alert("Workout updated successfully!");
+                        saveStatus.textContent = "Saved!";
+                    })
+                    .catch(() => {
+                        alert("Error saving workout.");
+                        saveStatus.textContent = "Error saving workout.";
+                    });
             };
 
-            // --- Reset Workout ---
-            window.resetForm = function() {
-                loadClientWorkout(); // Reload original data
+            window.resetForm = function () {
+                loadClientWorkout();
                 saveStatus.textContent = "Form reset.";
             };
 
-            // --- Back Button ---
-            window.goBack = function() {
+            window.goBack = function () {
                 window.location.href = "/index.html";
             };
         })

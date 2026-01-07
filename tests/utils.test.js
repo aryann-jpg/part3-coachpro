@@ -1,13 +1,10 @@
 const fs = require('fs');
-const path = require('path');
-const { updateWorkoutPlan } = require('../utils/AryanUtil'); // Adjust path as needed
+const { updateWorkoutPlan } = require('../utils/AryanUtil');
 
-// Mock fsSync so no real file operations happen
 jest.mock('fs');
 
-describe('Unit Tests for AryanUtil', () => {
+describe('Unit Tests for AryanUtil (Edit Workout Feature)', () => {
   let req, res;
-  let writeFileSyncMock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -17,7 +14,12 @@ describe('Unit Tests for AryanUtil', () => {
       body: {
         plan: {
           Monday: [
-            { workout_name: 'Bench Press', sets: '3', reps: '10', weight: '60' },
+            {
+              workout_name: 'Bench Press',
+              sets: 3,
+              reps: 10,
+              weight: 60,
+            },
           ],
         },
       },
@@ -28,7 +30,6 @@ describe('Unit Tests for AryanUtil', () => {
       json: jest.fn(),
     };
 
-    // Mock readFileSync and writeFileSync
     fs.readFileSync.mockReturnValue(
       JSON.stringify({
         workouts: [
@@ -40,9 +41,10 @@ describe('Unit Tests for AryanUtil', () => {
       })
     );
 
-    writeFileSyncMock = fs.writeFileSync.mockImplementation(() => {});
+    fs.writeFileSync.mockImplementation(() => {});
   });
 
+  // ---------------- SUCCESS CASE ----------------
   it('should update the workout plan successfully', async () => {
     await updateWorkoutPlan(req, res);
 
@@ -51,14 +53,16 @@ describe('Unit Tests for AryanUtil', () => {
       plan: req.body.plan,
     });
 
-    // Verify file write
-    expect(writeFileSyncMock).toHaveBeenCalled();
+    expect(fs.writeFileSync).toHaveBeenCalled();
+
     const writtenData = JSON.parse(fs.writeFileSync.mock.calls[0][1]);
     expect(writtenData.workouts[0].plan).toEqual(req.body.plan);
   });
 
+  // ---------------- VALIDATION TESTS ----------------
   it('should return 400 if plan is missing', async () => {
     req.body.plan = null;
+
     await updateWorkoutPlan(req, res);
 
     expect(res.status).toHaveBeenCalledWith(400);
@@ -67,8 +71,43 @@ describe('Unit Tests for AryanUtil', () => {
     });
   });
 
+  it('should return 400 if plan is not an object', async () => {
+    req.body.plan = 'invalid';
+
+    await updateWorkoutPlan(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      error: "Missing or invalid 'plan' in request body.",
+    });
+  });
+
+  it('should return 400 if exercise data is invalid', async () => {
+    req.body.plan.Monday[0].sets = 0;
+
+    await updateWorkoutPlan(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Invalid exercise data detected in Monday.',
+    });
+  });
+
+  it('should return 400 if workout name is too long', async () => {
+    req.body.plan.Monday[0].workout_name = 'A'.repeat(40);
+
+    await updateWorkoutPlan(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      error: 'Invalid exercise data detected in Monday.',
+    });
+  });
+
+  // ---------------- DATA STRUCTURE TESTS ----------------
   it('should return 404 if client workout not found', async () => {
     req.params.clientId = '999';
+
     await updateWorkoutPlan(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
@@ -77,8 +116,9 @@ describe('Unit Tests for AryanUtil', () => {
     });
   });
 
-  it('should return 500 if data structure is invalid', async () => {
+  it('should return 500 if workout data structure is invalid', async () => {
     fs.readFileSync.mockReturnValue(JSON.stringify({}));
+
     await updateWorkoutPlan(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
@@ -87,7 +127,8 @@ describe('Unit Tests for AryanUtil', () => {
     });
   });
 
-  it('should return 500 if write fails', async () => {
+  // ---------------- ERROR HANDLING ----------------
+  it('should return 500 if saving the workout plan fails', async () => {
     fs.writeFileSync.mockImplementation(() => {
       throw new Error('Disk error');
     });
