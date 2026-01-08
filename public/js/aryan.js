@@ -1,16 +1,16 @@
+let originalExercises = []; 
+
 function loadClientWorkout() {
-    // --- URL Params ---
+   
     const urlParams = new URLSearchParams(window.location.search);
     const clientId = urlParams.get("clientId");
     const workoutDay = urlParams.get("day");
 
-    // --- DOM Elements ---
     const clientNameEl = document.getElementById("clientName");
     const currentDayTitleEl = document.getElementById("currentDayTitle");
     const exerciseListContainer = document.getElementById("exerciseList");
     const saveStatus = document.getElementById("saveStatus");
 
-    // --- URL Validation ---
     if (!clientId || !workoutDay) {
         alert("Missing clientId or workout day in URL.");
         saveStatus.textContent = "Error: Missing URL parameters.";
@@ -45,27 +45,10 @@ function loadClientWorkout() {
             const plan = clientWorkouts.plan || {};
             const currentExercises = plan[workoutDay] || [];
 
-            exerciseListContainer.innerHTML = `
-                <div class="grid grid-cols-4 gap-2 font-semibold text-gray-600 border-b pb-2">
-                    <span>Workout Name</span>
-                    <span>Sets</span>
-                    <span>Reps</span>
-                    <span>Weight (kg)</span>
-                </div>
-            `;
+            originalExercises = JSON.parse(JSON.stringify(currentExercises));
 
-            currentExercises.forEach(ex => {
-                exerciseListContainer.insertAdjacentHTML("beforeend", `
-                    <div class="grid grid-cols-4 gap-2 items-center">
-                        <input type="text" value="${ex.workout_name || ''}" maxlength="30" class="border p-2 rounded" />
-                        <input type="number" min="1" value="${ex.sets || ''}" class="border p-2 rounded" />
-                        <input type="number" min="1" value="${ex.reps || ''}" class="border p-2 rounded" />
-                        <input type="number" min="1" value="${ex.weight || ''}" class="border p-2 rounded" />
-                    </div>
-                `);
-            });
+            renderExercises(currentExercises);
 
-            // --- Save Workout ---
             window.saveWorkoutPlan = function (event) {
                 event.preventDefault();
                 saveStatus.textContent = "";
@@ -136,7 +119,7 @@ function loadClientWorkout() {
             };
 
             window.resetForm = function () {
-                loadClientWorkout();
+                renderExercises(originalExercises);
                 saveStatus.textContent = "Form reset.";
             };
 
@@ -149,4 +132,27 @@ function loadClientWorkout() {
             alert("Error loading workout data.");
             saveStatus.textContent = "Error loading workout data.";
         });
+}
+
+function renderExercises(exercises) {
+    const exerciseListContainer = document.getElementById("exerciseList");
+    exerciseListContainer.innerHTML = `
+        <div class="grid grid-cols-4 gap-2 font-semibold text-gray-600 border-b pb-2">
+            <span>Workout Name</span>
+            <span>Sets</span>
+            <span>Reps</span>
+            <span>Weight (kg)</span>
+        </div>
+    `;
+
+    exercises.forEach(ex => {
+        exerciseListContainer.insertAdjacentHTML("beforeend", `
+            <div class="grid grid-cols-4 gap-2 items-center">
+                <input type="text" value="${ex.workout_name || ''}" maxlength="30" class="border p-2 rounded" />
+                <input type="number" min="1" value="${ex.sets || ''}" class="border p-2 rounded" />
+                <input type="number" min="1" value="${ex.reps || ''}" class="border p-2 rounded" />
+                <input type="number" min="1" value="${ex.weight || ''}" class="border p-2 rounded" />
+            </div>
+        `);
+    });
 }
