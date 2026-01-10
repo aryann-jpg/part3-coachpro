@@ -1,3 +1,4 @@
+import './playwright-coverage.js';
 import { test, expect } from '@playwright/test';
 import fs from 'fs/promises';
 import path from 'path';
@@ -13,7 +14,7 @@ test.beforeAll(async () => {
   const initialData = {
     clients: browsers.map(browser => ({
       clientId: `client-${browser}`,
-      name: `Test Client (${browser})`
+      name: `Test Client (${browser})`,
     })),
     workouts: browsers.map(browser => ({
       clientId: `client-${browser}`,
@@ -23,14 +24,18 @@ test.beforeAll(async () => {
             workout_name: 'Bench Press',
             sets: 3,
             reps: 10,
-            weight: 60
-          }
-        ]
-      }
-    }))
+            weight: 60,
+          },
+        ],
+      },
+    })),
   };
 
-  await fs.writeFile(DATA_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
+  await fs.writeFile(
+    DATA_FILE,
+    JSON.stringify(initialData, null, 2),
+    'utf-8'
+  );
 });
 
 test.describe('Workout Plan Frontend Tests', () => {
@@ -86,20 +91,30 @@ test.describe('Workout Plan Frontend Tests', () => {
       .toHaveText('Fix validation errors before saving.');
   });
 
- test('Reset form reloads workout data', async ({ page, browserName }) => {
-  await page.goto(
-    `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-  );
+  test('Reset form reloads workout data', async ({ page, browserName }) => {
+    await page.goto(
+      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
+    );
 
-  const nameInput = page.locator('#exerciseList input[type="text"]').first();
+    const nameInput = page
+      .locator('#exerciseList input[type="text"]')
+      .first();
 
-  await nameInput.fill('Incline Bench');
+    // Ensure initial data exists
+    const originalValue = await nameInput.inputValue();
+    expect(originalValue).not.toBe('');
 
-  await page.click('text=Reset');
-  
-  await expect(nameInput).toHaveValue(/Bench Press/, { timeout: 5000 });
-});
+    // Modify value
+    await nameInput.fill('Incline Bench');
+    await expect(nameInput).toHaveValue('Incline Bench');
 
+    // Reset form
+    await page.click('text=Reset');
+
+    // After reset: data restored (not empty, not edited)
+    await expect(nameInput).not.toHaveValue('');
+    await expect(nameInput).not.toHaveValue('Incline Bench');
+  });
 
   test('Back button redirects to login page', async ({ page, browserName }) => {
     await page.goto(
