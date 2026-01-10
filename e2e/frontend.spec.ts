@@ -20,7 +20,7 @@ test.beforeAll(async () => {
       plan: {
         Monday: [
           {
-            workout_name: `Bench Press`, 
+            workout_name: 'Bench Press',
             sets: 3,
             reps: 10,
             weight: 60
@@ -32,7 +32,6 @@ test.beforeAll(async () => {
 
   await fs.writeFile(DATA_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
 });
-
 
 test.describe('Workout Plan Frontend Tests', () => {
 
@@ -48,10 +47,8 @@ test.describe('Workout Plan Frontend Tests', () => {
       .locator('#exerciseList input[type="text"]')
       .first();
 
-    await nameInput.waitFor();
-    await expect(nameInput).toHaveValue(/Bench Press/); 
+    await expect(nameInput).toHaveValue(/Bench Press/);
   });
-
 
   test('Edit workout and save successfully', async ({ page, browserName }) => {
     await page.goto(
@@ -68,8 +65,7 @@ test.describe('Workout Plan Frontend Tests', () => {
 
     await page.locator('button[type="submit"]').click();
 
-    await expect(page.locator('#saveStatus'))
-      .toHaveText('Saved!');
+    await expect(page.locator('#saveStatus')).toHaveText('Saved!');
   });
 
   test('Validation error when fields are empty', async ({ page, browserName }) => {
@@ -80,7 +76,6 @@ test.describe('Workout Plan Frontend Tests', () => {
     const inputs = page.locator('#exerciseList input');
     await inputs.first().waitFor();
 
-    // Clear ALL fields
     for (let i = 0; i < 4; i++) {
       await inputs.nth(i).fill('');
     }
@@ -91,24 +86,20 @@ test.describe('Workout Plan Frontend Tests', () => {
       .toHaveText('Fix validation errors before saving.');
   });
 
-  test('Reset form reloads workout data', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
+ test('Reset form reloads workout data', async ({ page, browserName }) => {
+  await page.goto(
+    `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
+  );
 
-    const nameInput = page
-      .locator('#exerciseList input[type="text"]')
-      .first();
+  const nameInput = page.locator('#exerciseList input[type="text"]').first();
 
-    await nameInput.waitFor();
-    await nameInput.fill('Incline Bench'); 
+  await nameInput.fill('Incline Bench');
 
-    await page.click('text=Reset');
+  await page.click('text=Reset');
+  
+  await expect(nameInput).toHaveValue(/Bench Press/, { timeout: 5000 });
+});
 
-   
-    await nameInput.waitFor();
-    await expect(nameInput).toHaveValue(/Bench Press/); 
-  });
 
   test('Back button redirects to login page', async ({ page, browserName }) => {
     await page.goto(
@@ -117,7 +108,6 @@ test.describe('Workout Plan Frontend Tests', () => {
 
     await page.click('text=Back');
 
-   
     await expect(page).toHaveURL(`${BASE_URL}/login.html`);
   });
 

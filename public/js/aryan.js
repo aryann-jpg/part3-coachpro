@@ -1,10 +1,14 @@
 let originalExercises = []; 
+let clientIdGlobal = "";
+let workoutDayGlobal = "";
 
 function loadClientWorkout() {
-   
     const urlParams = new URLSearchParams(window.location.search);
     const clientId = urlParams.get("clientId");
     const workoutDay = urlParams.get("day");
+
+    clientIdGlobal = clientId;
+    workoutDayGlobal = workoutDay;
 
     const clientNameEl = document.getElementById("clientName");
     const currentDayTitleEl = document.getElementById("currentDayTitle");
@@ -49,7 +53,8 @@ function loadClientWorkout() {
 
             renderExercises(currentExercises);
 
-            window.saveWorkoutPlan = function (event) {
+            // ---------------- Save workout ----------------
+            window.saveWorkoutPlan = function(event) {
                 event.preventDefault();
                 saveStatus.textContent = "";
 
@@ -65,31 +70,23 @@ function loadClientWorkout() {
                     const reps = Number(inputs[2].value);
                     const weight = Number(inputs[3].value);
 
-                    // --- Validation Rules ---
                     if (!name || !sets || !reps || !weight) {
                         alert(`All fields must be filled for exercise #${index + 1}`);
                         hasError = true;
                         return;
                     }
-
                     if (name.length > 30) {
                         alert(`Workout name too long for exercise #${index + 1}`);
                         hasError = true;
                         return;
                     }
-
                     if (sets <= 0 || reps <= 0 || weight <= 0) {
                         alert(`Numeric values must be greater than zero (exercise #${index + 1})`);
                         hasError = true;
                         return;
                     }
 
-                    updatedExercises.push({
-                        workout_name: name,
-                        sets,
-                        reps,
-                        weight
-                    });
+                    updatedExercises.push({ workout_name: name, sets, reps, weight });
                 });
 
                 if (hasError) {
@@ -104,26 +101,47 @@ function loadClientWorkout() {
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ plan: updatedPlan })
                 })
-                    .then(res => {
-                        if (!res.ok) throw new Error("Save failed");
-                        return res.json();
-                    })
-                    .then(() => {
-                        alert("Workout updated successfully!");
-                        saveStatus.textContent = "Saved!";
-                    })
-                    .catch(() => {
-                        alert("Error saving workout.");
-                        saveStatus.textContent = "Error saving workout.";
-                    });
+                .then(res => {
+                    if (!res.ok) throw new Error("Save failed");
+                    return res.json();
+                })
+                .then(() => {
+                    alert("Workout updated successfully!");
+                    saveStatus.textContent = "Saved!";
+                    originalExercises = JSON.parse(JSON.stringify(updatedExercises));
+                })
+                .catch(() => {
+                    alert("Error saving workout.");
+                    saveStatus.textContent = "Error saving workout.";
+                });
             };
 
-            window.resetForm = function () {
-                renderExercises(originalExercises);
-                saveStatus.textContent = "Form reset.";
+            // ---------------- Reset ----------------
+            window.resetForm = async function() {
+                saveStatus.textContent = "";
+                // Reload from coaching-data.json to ensure original value
+                try {
+                    const response = await fetch("/data/coaching-data.json");
+                    const data = await response.json();
+                    const clientWorkouts = data.workouts.find(w => w.clientId === clientIdGlobal);
+                    const plan = clientWorkouts.plan || {};
+                    const exercises = plan[workoutDayGlobal] || [];
+
+                    originalExercises = JSON.parse(JSON.stringify(exercises));
+
+                    renderExercises(originalExercises);
+
+                    // Return a resolved promise for Playwright to wait
+                    return Promise.resolve();
+                } catch (err) {
+                    console.error(err);
+                    saveStatus.textContent = "Error resetting form.";
+                    return Promise.reject(err);
+                }
             };
 
-            window.goBack = function () {
+            // ---------------- Back ----------------
+            window.goBack = function() {
                 window.location.href = "/index.html";
             };
         })

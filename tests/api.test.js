@@ -2,32 +2,16 @@ const request = require('supertest');
 const { app } = require('../index');
 const fs = require('fs');
 
-// Mock only the functions used
+// Mock fs
 jest.mock('fs', () => ({
   readFileSync: jest.fn(),
   writeFileSync: jest.fn(),
-  promises: {
-    writeFile: jest.fn(),
-  },
 }));
-
-let server;
-
-// Start server before all tests
-beforeAll(() => {
-  server = app.listen(5050);
-});
-
-// Close server after all tests
-afterAll(() => {
-  if (server) server.close();
-});
 
 describe('API Tests - Edit Workout Plan', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    // Mock reading the workout JSON file
     fs.readFileSync.mockReturnValue(
       JSON.stringify({
         workouts: [
@@ -39,9 +23,7 @@ describe('API Tests - Edit Workout Plan', () => {
       })
     );
 
-    // Mock writing to file successfully
     fs.writeFileSync.mockImplementation(() => {});
-    fs.promises.writeFile.mockResolvedValue();
   });
 
   it('PUT /api/workout/:clientId should update workout plan (200)', async () => {
@@ -52,9 +34,9 @@ describe('API Tests - Edit Workout Plan', () => {
           Monday: [
             {
               workout_name: 'Bench Press',
-              sets: '3',
-              reps: '10',
-              weight: '60',
+              sets: 3,
+              reps: 10,
+              weight: 60,
             },
           ],
         },
@@ -91,7 +73,6 @@ describe('API Tests - Edit Workout Plan', () => {
   });
 
   it('should return 500 if workout data structure is invalid', async () => {
-    // Simulate invalid file structure
     fs.readFileSync.mockReturnValue(JSON.stringify({}));
 
     const res = await request(app)
@@ -102,7 +83,6 @@ describe('API Tests - Edit Workout Plan', () => {
   });
 
   it('should return 500 if saving workout plan fails', async () => {
-    // Simulate write error
     fs.writeFileSync.mockImplementation(() => {
       throw new Error('Disk error');
     });

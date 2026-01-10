@@ -16,7 +16,6 @@
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <h1 class="text-xl font-semibold text-indigo-600">CoachPro</h1>
 
-            <!-- Calls goBack() which is defined inside loadClientWorkout() -->
             <button onclick="goBack()" class="text-gray-600 hover:text-indigo-600 transition">← Back to Dashboard</button>
         </div>
     </nav>
@@ -36,11 +35,8 @@
 
             <!-- FORM -->
             <form id="editWorkoutForm" onsubmit="saveWorkoutPlan(event)" class="space-y-6">
-
-                <!-- Exercise rows go here -->
                 <div id="exerciseList" class="space-y-2"></div>
 
-                <!-- BUTTONS -->
                 <div class="flex justify-end gap-4 pt-4">
                     <button type="button" onclick="resetForm()" class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
                         Reset
