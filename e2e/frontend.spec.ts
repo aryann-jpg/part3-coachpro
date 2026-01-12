@@ -100,18 +100,18 @@ test.describe('Workout Plan Frontend Tests', () => {
       .locator('#exerciseList input[type="text"]')
       .first();
 
-    // Ensure initial data exists
+    
     const originalValue = await nameInput.inputValue();
     expect(originalValue).not.toBe('');
 
-    // Modify value
+    
     await nameInput.fill('Incline Bench');
     await expect(nameInput).toHaveValue('Incline Bench');
 
     // Reset form
     await page.click('text=Reset');
 
-    // After reset: data restored (not empty, not edited)
+   
     await expect(nameInput).not.toHaveValue('');
     await expect(nameInput).not.toHaveValue('Incline Bench');
   });
