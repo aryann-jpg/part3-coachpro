@@ -14,11 +14,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Serve static files
-app.use(express.static("./public"));
+app.use(express.static('public'), { index: 'login.html' });
 
 // Routes
-app.get('/', (req, res) => {
-  res.sendFile((__dirname, 'utils', 'coaching-data.json'));
+app.get('/data/coaching-data.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'utils', 'coaching-data.json'));
 });
 
 app.post('/api/login', loginController);
