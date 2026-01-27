@@ -1,5 +1,4 @@
-import { describe, it, expect } from 'vitest';
-import { validateWorkout } from '../utils/validation';
+const { validateWorkout } = require('../utils/validation');
 
 describe('Workout Validation', () => {
   it('returns true for valid workout data', () => {

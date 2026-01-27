@@ -45,10 +45,10 @@
       "plan": {
         "Monday": [
           {
-            "workout_name": "Bench Press",
-            "sets": 3,
-            "reps": 10,
-            "weight": 60
+            "workout_name": "Incline Bench",
+            "sets": 4,
+            "reps": 8,
+            "weight": 70
           }
         ]
       }

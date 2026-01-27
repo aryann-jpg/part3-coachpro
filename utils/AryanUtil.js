@@ -60,6 +60,7 @@ async function updateWorkoutPlan(req, res) {
         });
 
     } catch (err) {
+        // We keep this log for real-world production debugging
         console.error("Error saving workout plan:", err);
         return res.status(500).json({ error: "Failed to save workout plan." });
     }

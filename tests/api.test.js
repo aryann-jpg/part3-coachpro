@@ -73,6 +73,9 @@ describe('API Tests - Edit Workout Plan', () => {
   });
 
   it('should return 500 if workout data structure is invalid', async () => {
+    // Mute console for this test to avoid seeing the error log
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    
     fs.readFileSync.mockReturnValue(JSON.stringify({}));
 
     const res = await request(app)
@@ -80,9 +83,14 @@ describe('API Tests - Edit Workout Plan', () => {
       .send({ plan: { Monday: [] } });
 
     expect(res.status).toBe(500);
+    consoleSpy.mockRestore();
   });
 
   it('should return 500 if saving workout plan fails', async () => {
+    // 1. Spy on console.error to keep terminal clean
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // 2. Mock the failure
     fs.writeFileSync.mockImplementation(() => {
       throw new Error('Disk error');
     });
@@ -91,7 +99,11 @@ describe('API Tests - Edit Workout Plan', () => {
       .put('/api/workout/1')
       .send({ plan: { Monday: [] } });
 
+    // 3. Assertions
     expect(res.status).toBe(500);
     expect(res.body.error).toBe('Failed to save workout plan.');
+
+    // 4. Restore console.error
+    consoleSpy.mockRestore();
   });
 });

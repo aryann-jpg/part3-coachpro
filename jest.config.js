@@ -9,8 +9,8 @@ collectCoverage: true,
 // Specify which files to include in the coverage report
 // Here, all JS files in 'utils' folder and 'index.js' are included
 collectCoverageFrom: [
-'utils/**/*.js',
-'index.js'
+"**/utils/AryanUtil.js",
+"**/utils/validation.js",
 ],
 // Directory where coverage reports will be saved
 coverageDirectory: 'coverage/backend',

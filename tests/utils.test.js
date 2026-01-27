@@ -117,6 +117,9 @@ describe('Unit Tests for AryanUtil (Edit Workout Feature)', () => {
   });
 
   it('should return 500 if workout data structure is invalid', async () => {
+    // Adding console spy here too as this triggers a 500 log
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    
     fs.readFileSync.mockReturnValue(JSON.stringify({}));
 
     await updateWorkoutPlan(req, res);
@@ -125,19 +128,29 @@ describe('Unit Tests for AryanUtil (Edit Workout Feature)', () => {
     expect(res.json).toHaveBeenCalledWith({
       error: 'Workout data structure invalid.',
     });
+    
+    consoleSpy.mockRestore();
   });
 
   // ---------------- ERROR HANDLING ----------------
   it('should return 500 if saving the workout plan fails', async () => {
+    // 1. Spy on console.error to keep the terminal clean
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    // 2. Trigger the mock error
     fs.writeFileSync.mockImplementation(() => {
       throw new Error('Disk error');
     });
 
     await updateWorkoutPlan(req, res);
 
+    // 3. Verify the response
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
       error: 'Failed to save workout plan.',
     });
+
+    // 4. Restore the original console behavior
+    consoleSpy.mockRestore();
   });
 });
