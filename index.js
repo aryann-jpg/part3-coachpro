@@ -13,8 +13,8 @@ const PORT = process.env.PORT || 5050;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files
-app.use(express.static('public'), { index: 'login.html' });
+// Serve static files from 'public', default file is login.html
+app.use(express.static(path.join(__dirname, 'public'), { index: 'login.html' }));
 
 // Routes
 app.get('/data/coaching-data.json', (req, res) => {
