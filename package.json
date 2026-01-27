@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --verbose",
     "test:coverage": "jest --verbose --coverage",
-    "test-frontend": "npx playwright test",
+    "test-frontend": "npx playwright test --workers=4",
     "test-frontend:coverage": "node generate-coverage.js",
     "test:run": "vitest run",
     "coverage": "vitest run --coverage"
