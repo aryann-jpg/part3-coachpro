@@ -1,4 +1,4 @@
-const { validateWorkout } = require('../utils/validation');
+const { validateWorkout } = require('../../utils/validation');
 
 describe('Workout Validation', () => {
   it('returns true for valid workout data', () => {
