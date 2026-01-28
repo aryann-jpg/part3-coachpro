@@ -1,4 +1,4 @@
-let originalExercises = []; 
+let originalExercises = [];
 let clientIdGlobal = "";
 let workoutDayGlobal = "";
 
@@ -29,6 +29,7 @@ function loadClientWorkout() {
 
     currentDayTitleEl.textContent = workoutDay;
 
+    // ---------------- Fetch and render ----------------
     fetch("/data/coaching-data.json")
         .then(res => {
             if (!res.ok) throw new Error("Failed to load data");
@@ -44,11 +45,11 @@ function loadClientWorkout() {
                 return;
             }
 
+            // ---------------- Set client name ----------------
             clientNameEl.textContent = client.name;
 
             const plan = clientWorkouts.plan || {};
             const currentExercises = plan[workoutDay] || [];
-
             originalExercises = JSON.parse(JSON.stringify(currentExercises));
 
             renderExercises(currentExercises);
@@ -140,8 +141,7 @@ function loadClientWorkout() {
 
             // ---------------- Back ----------------
             window.goBack = function() {
-                // changed to login.html to match Playwright test
-                window.location.href = "/login.html";
+                window.location.href = "/login.html"; // updated to match Playwright test
             };
         })
         .catch(err => {
@@ -151,6 +151,7 @@ function loadClientWorkout() {
         });
 }
 
+// ---------------- Render exercises ----------------
 function renderExercises(exercises) {
     const exerciseListContainer = document.getElementById("exerciseList");
     exerciseListContainer.innerHTML = `
@@ -174,5 +175,7 @@ function renderExercises(exercises) {
     });
 }
 
-// ---------------- Auto load on page load ----------------
-document.addEventListener("DOMContentLoaded", loadClientWorkout);
+// ---------------- Attach load to DOMContentLoaded ----------------
+document.addEventListener("DOMContentLoaded", () => {
+    loadClientWorkout();
+});
