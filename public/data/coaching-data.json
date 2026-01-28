@@ -2,15 +2,15 @@
   "clients": [
     {
       "clientId": "client-chromium",
-      "name": "Test Client (chromium)"
+      "name": "Test Client"
     },
     {
       "clientId": "client-firefox",
-      "name": "Test Client (firefox)"
+      "name": "Test Client"
     },
     {
       "clientId": "client-webkit",
-      "name": "Test Client (webkit)"
+      "name": "Test Client"
     }
   ],
   "workouts": [
@@ -45,10 +45,10 @@
       "plan": {
         "Monday": [
           {
-            "workout_name": "Incline Bench",
-            "sets": 4,
-            "reps": 8,
-            "weight": 70
+            "workout_name": "Bench Press",
+            "sets": 3,
+            "reps": 10,
+            "weight": 60
           }
         ]
       }

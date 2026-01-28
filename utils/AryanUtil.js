@@ -1,23 +1,39 @@
-const path = require('path');
-const fsSync = require('fs');
+const path = require("path");
+const fs = require("fs");
+
+// ✅ Correct absolute path (CI-safe)
+const dataDir = path.join(__dirname);
+const dataFile = path.join(dataDir, "coaching-data.json");
+
+// ✅ Ensure file exists (important for Jenkins)
+function ensureDataFile() {
+    if (!fs.existsSync(dataFile)) {
+        const initialData = {
+            clients: [],
+            workouts: []
+        };
+        fs.writeFileSync(dataFile, JSON.stringify(initialData, null, 2), "utf8");
+    }
+}
 
 async function updateWorkoutPlan(req, res) {
     const clientId = req.params.clientId;
     const { plan } = req.body;
 
     // --- clientId validation ---
-    if (!clientId || typeof clientId !== 'string') {
+    if (!clientId || typeof clientId !== "string") {
         return res.status(400).json({ error: "Invalid clientId." });
     }
 
     // --- plan validation ---
-    if (!plan || typeof plan !== 'object' || Array.isArray(plan)) {
+    if (!plan || typeof plan !== "object" || Array.isArray(plan)) {
         return res.status(400).json({ error: "Missing or invalid 'plan' in request body." });
     }
 
     try {
-        const filePath = path.join(__dirname, 'coaching-data.json');
-        const data = JSON.parse(fsSync.readFileSync(filePath, 'utf8'));
+        ensureDataFile();
+
+        const data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
 
         if (!Array.isArray(data.workouts)) {
             return res.status(500).json({ error: "Workout data structure invalid." });
@@ -37,7 +53,7 @@ async function updateWorkoutPlan(req, res) {
             for (const ex of plan[day]) {
                 if (
                     !ex.workout_name ||
-                    typeof ex.workout_name !== 'string' ||
+                    typeof ex.workout_name !== "string" ||
                     ex.workout_name.length > 30 ||
                     ex.sets <= 0 ||
                     ex.reps <= 0 ||
@@ -50,9 +66,10 @@ async function updateWorkoutPlan(req, res) {
             }
         }
 
+        // ✅ Update workout plan
         workout.plan = plan;
 
-        fsSync.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+        fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), "utf8");
 
         return res.json({
             message: "Workout plan updated successfully!",
@@ -60,7 +77,6 @@ async function updateWorkoutPlan(req, res) {
         });
 
     } catch (err) {
-        // We keep this log for real-world production debugging
         console.error("Error saving workout plan:", err);
         return res.status(500).json({ error: "Failed to save workout plan." });
     }
