@@ -1,20 +1,8 @@
 const path = require("path");
 const fs = require("fs");
 
-// ✅ Correct absolute path (CI-safe)
-const dataDir = path.join(__dirname);
-const dataFile = path.join(dataDir, "coaching-data.json");
-
-// ✅ Ensure file exists (important for Jenkins)
-function ensureDataFile() {
-    if (!fs.existsSync(dataFile)) {
-        const initialData = {
-            clients: [],
-            workouts: []
-        };
-        fs.writeFileSync(dataFile, JSON.stringify(initialData, null, 2), "utf8");
-    }
-}
+// ✅ Correct path (utils/coaching-data.json)
+const dataFile = path.join(__dirname, "coaching-data.json");
 
 async function updateWorkoutPlan(req, res) {
     const clientId = req.params.clientId;
@@ -31,9 +19,9 @@ async function updateWorkoutPlan(req, res) {
     }
 
     try {
-        ensureDataFile();
-
-        const data = JSON.parse(fs.readFileSync(dataFile, "utf8"));
+        // ✅ Let tests control fs behavior (DO NOT create files here)
+        const rawData = fs.readFileSync(dataFile, "utf8");
+        const data = JSON.parse(rawData);
 
         if (!Array.isArray(data.workouts)) {
             return res.status(500).json({ error: "Workout data structure invalid." });
@@ -66,12 +54,12 @@ async function updateWorkoutPlan(req, res) {
             }
         }
 
-        // ✅ Update workout plan
+        // ✅ Update plan
         workout.plan = plan;
 
         fs.writeFileSync(dataFile, JSON.stringify(data, null, 2), "utf8");
 
-        return res.json({
+        return res.status(200).json({
             message: "Workout plan updated successfully!",
             plan
         });
