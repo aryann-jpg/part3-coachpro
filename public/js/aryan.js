@@ -30,7 +30,7 @@ function loadClientWorkout() {
     currentDayTitleEl.textContent = workoutDay;
 
     // ---------------- Fetch and render ----------------
-    fetch("/data/coaching-data.json")
+    fetch("./utils/coaching-data.json")
         .then(res => {
             if (!res.ok) throw new Error("Failed to load data");
             return res.json();
