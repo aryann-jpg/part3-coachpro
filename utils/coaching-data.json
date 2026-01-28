@@ -2,15 +2,15 @@
   "clients": [
     {
       "clientId": "client-chromium",
-      "name": "Test Client (chromium)"
+      "name": "Test Client"
     },
     {
       "clientId": "client-firefox",
-      "name": "Test Client (firefox)"
+      "name": "Test Client"
     },
     {
       "clientId": "client-webkit",
-      "name": "Test Client (webkit)"
+      "name": "Test Client"
     }
   ],
   "workouts": [
