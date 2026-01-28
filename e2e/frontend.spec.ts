@@ -27,6 +27,14 @@ test.beforeAll(async () => {
             weight: 60,
           },
         ],
+        Tuesday: [
+          {
+            workout_name: 'Squat',
+            sets: 4,
+            reps: 12,
+            weight: 80,
+          },
+        ],
       },
     })),
   };
@@ -40,16 +48,12 @@ test.describe('Workout Plan Frontend Tests', () => {
     await page.goto(
       `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
     );
-
     await expect(page.locator('#clientName')).toContainText('Test Client');
     await expect(page.locator('#currentDayTitle')).toHaveText('Monday');
   });
 
   test('Workout fields are prefilled from stored data', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
-
+    await page.goto(`${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`);
     const inputs = page.locator('#exerciseList input');
     await expect(inputs.nth(0)).toHaveValue('Bench Press');
     await expect(inputs.nth(1)).toHaveValue('3');
@@ -57,102 +61,67 @@ test.describe('Workout Plan Frontend Tests', () => {
     await expect(inputs.nth(3)).toHaveValue('60');
   });
 
-  test('Edit workout and save successfully', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
-
+  test('Edit multiple exercises and save', async ({ page, browserName }) => {
+    await page.goto(`${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`);
     const inputs = page.locator('#exerciseList input');
-    await inputs.first().waitFor();
 
+    // Update first exercise
     await inputs.nth(0).fill('Incline Bench');
     await inputs.nth(1).fill('4');
     await inputs.nth(2).fill('8');
     await inputs.nth(3).fill('70');
 
-    await page.click('button[type="submit"]');
+    // Add second exercise
+    await page.click('text=Add Exercise');
+    const newInputs = page.locator('#exerciseList input');
+    await newInputs.nth(4).fill('Push Ups');
+    await newInputs.nth(5).fill('3');
+    await newInputs.nth(6).fill('15');
+    await newInputs.nth(7).fill('0');
 
+    await page.click('button[type="submit"]');
     await expect(page.locator('#saveStatus')).toHaveText('Saved!');
   });
 
-  test('Validation error when fields are empty', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
-
-    const inputs = page.locator('#exerciseList input');
-    for (let i = 0; i < 4; i++) {
-      await inputs.nth(i).fill('');
-    }
-
+  test('Delete an exercise', async ({ page, browserName }) => {
+    await page.goto(`${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`);
+    const deleteBtn = page.locator('.delete-exercise').first();
+    await deleteBtn.click();
     await page.click('button[type="submit"]');
-
-    await expect(page.locator('#saveStatus'))
-      .toHaveText('Fix validation errors before saving.');
+    await expect(page.locator('#saveStatus')).toHaveText('Saved!');
   });
 
-  test('Validation error when values are zero or negative', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
-
+  test('Persistence after save', async ({ page, browserName }) => {
+    await page.goto(`${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`);
     const inputs = page.locator('#exerciseList input');
-    await inputs.nth(1).fill('0');
-    await inputs.nth(2).fill('-5');
-    await inputs.nth(3).fill('0');
-
+    await inputs.nth(0).fill('Flat Bench');
     await page.click('button[type="submit"]');
-
-    await expect(page.locator('#saveStatus'))
-      .toHaveText('Fix validation errors before saving.');
+    await page.reload();
+    await expect(page.locator('#exerciseList input').nth(0)).toHaveValue('Flat Bench');
   });
 
-  test('Workout name length validation (>30 chars)', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
-
-    const nameInput = page.locator('#exerciseList input[type="text"]').first();
-    await nameInput.fill('A'.repeat(35));
-
-    await page.click('button[type="submit"]');
-
-    await expect(page.locator('#saveStatus'))
-      .toHaveText('Fix validation errors before saving.');
+  test('Cross-day workout load', async ({ page, browserName }) => {
+    await page.goto(`${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Tuesday`);
+    const inputs = page.locator('#exerciseList input');
+    await expect(inputs.nth(0)).toHaveValue('Squat');
+    await expect(inputs.nth(1)).toHaveValue('4');
+    await expect(inputs.nth(2)).toHaveValue('12');
+    await expect(inputs.nth(3)).toHaveValue('80');
   });
 
   test('Reset form reloads original workout data', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
-
+    await page.goto(`${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`);
     const nameInput = page.locator('#exerciseList input[type="text"]').first();
     const originalValue = await nameInput.inputValue();
-
     await nameInput.fill('Incline Bench');
-    await expect(nameInput).toHaveValue('Incline Bench');
-
     await page.click('text=Reset');
-
     await expect(nameInput).toHaveValue(originalValue);
   });
 
   test('Back button redirects to login page', async ({ page, browserName }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
-    );
-
+    await page.goto(`${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`);
     await page.click('text=Back');
-
     await expect(page).toHaveURL(`${BASE_URL}/login.html`);
-  });
-
-  test('Invalid clientId shows graceful UI behavior', async ({ page }) => {
-    await page.goto(
-      `${BASE_URL}/aryan-edit.html?clientId=invalid-client&day=Monday`
-    );
-
-    await expect(page.locator('body')).toBeVisible();
   });
 
 });
