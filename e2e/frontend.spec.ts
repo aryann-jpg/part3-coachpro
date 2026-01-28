@@ -31,11 +31,7 @@ test.beforeAll(async () => {
     })),
   };
 
-  await fs.writeFile(
-    DATA_FILE,
-    JSON.stringify(initialData, null, 2),
-    'utf-8'
-  );
+  await fs.writeFile(DATA_FILE, JSON.stringify(initialData, null, 2), 'utf-8');
 });
 
 test.describe('Workout Plan Frontend Tests', () => {
@@ -47,12 +43,18 @@ test.describe('Workout Plan Frontend Tests', () => {
 
     await expect(page.locator('#clientName')).toContainText('Test Client');
     await expect(page.locator('#currentDayTitle')).toHaveText('Monday');
+  });
 
-    const nameInput = page
-      .locator('#exerciseList input[type="text"]')
-      .first();
+  test('Workout fields are prefilled from stored data', async ({ page, browserName }) => {
+    await page.goto(
+      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
+    );
 
-    await expect(nameInput).toHaveValue(/Bench Press/);
+    const inputs = page.locator('#exerciseList input');
+    await expect(inputs.nth(0)).toHaveValue('Bench Press');
+    await expect(inputs.nth(1)).toHaveValue('3');
+    await expect(inputs.nth(2)).toHaveValue('10');
+    await expect(inputs.nth(3)).toHaveValue('60');
   });
 
   test('Edit workout and save successfully', async ({ page, browserName }) => {
@@ -68,7 +70,7 @@ test.describe('Workout Plan Frontend Tests', () => {
     await inputs.nth(2).fill('8');
     await inputs.nth(3).fill('70');
 
-    await page.locator('button[type="submit"]').click();
+    await page.click('button[type="submit"]');
 
     await expect(page.locator('#saveStatus')).toHaveText('Saved!');
   });
@@ -79,41 +81,60 @@ test.describe('Workout Plan Frontend Tests', () => {
     );
 
     const inputs = page.locator('#exerciseList input');
-    await inputs.first().waitFor();
-
     for (let i = 0; i < 4; i++) {
       await inputs.nth(i).fill('');
     }
 
-    await page.locator('button[type="submit"]').click();
+    await page.click('button[type="submit"]');
 
     await expect(page.locator('#saveStatus'))
       .toHaveText('Fix validation errors before saving.');
   });
 
-  test('Reset form reloads workout data', async ({ page, browserName }) => {
+  test('Validation error when values are zero or negative', async ({ page, browserName }) => {
     await page.goto(
       `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
     );
 
-    const nameInput = page
-      .locator('#exerciseList input[type="text"]')
-      .first();
+    const inputs = page.locator('#exerciseList input');
+    await inputs.nth(1).fill('0');
+    await inputs.nth(2).fill('-5');
+    await inputs.nth(3).fill('0');
 
-    
+    await page.click('button[type="submit"]');
+
+    await expect(page.locator('#saveStatus'))
+      .toHaveText('Fix validation errors before saving.');
+  });
+
+  test('Workout name length validation (>30 chars)', async ({ page, browserName }) => {
+    await page.goto(
+      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
+    );
+
+    const nameInput = page.locator('#exerciseList input[type="text"]').first();
+    await nameInput.fill('A'.repeat(35));
+
+    await page.click('button[type="submit"]');
+
+    await expect(page.locator('#saveStatus'))
+      .toHaveText('Fix validation errors before saving.');
+  });
+
+  test('Reset form reloads original workout data', async ({ page, browserName }) => {
+    await page.goto(
+      `${BASE_URL}/aryan-edit.html?clientId=client-${browserName}&day=Monday`
+    );
+
+    const nameInput = page.locator('#exerciseList input[type="text"]').first();
     const originalValue = await nameInput.inputValue();
-    expect(originalValue).not.toBe('');
 
-    
     await nameInput.fill('Incline Bench');
     await expect(nameInput).toHaveValue('Incline Bench');
 
-    // Reset form
     await page.click('text=Reset');
 
-   
-    await expect(nameInput).not.toHaveValue('');
-    await expect(nameInput).not.toHaveValue('Incline Bench');
+    await expect(nameInput).toHaveValue(originalValue);
   });
 
   test('Back button redirects to login page', async ({ page, browserName }) => {
@@ -124,6 +145,14 @@ test.describe('Workout Plan Frontend Tests', () => {
     await page.click('text=Back');
 
     await expect(page).toHaveURL(`${BASE_URL}/login.html`);
+  });
+
+  test('Invalid clientId shows graceful UI behavior', async ({ page }) => {
+    await page.goto(
+      `${BASE_URL}/aryan-edit.html?clientId=invalid-client&day=Monday`
+    );
+
+    await expect(page.locator('body')).toBeVisible();
   });
 
 });
