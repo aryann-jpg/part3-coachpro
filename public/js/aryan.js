@@ -119,7 +119,6 @@ function loadClientWorkout() {
             // ---------------- Reset ----------------
             window.resetForm = async function() {
                 saveStatus.textContent = "";
-                // Reload from coaching-data.json to ensure original value
                 try {
                     const response = await fetch("/data/coaching-data.json");
                     const data = await response.json();
@@ -131,7 +130,6 @@ function loadClientWorkout() {
 
                     renderExercises(originalExercises);
 
-                    // Return a resolved promise for Playwright to wait
                     return Promise.resolve();
                 } catch (err) {
                     console.error(err);
@@ -142,7 +140,8 @@ function loadClientWorkout() {
 
             // ---------------- Back ----------------
             window.goBack = function() {
-                window.location.href = "/index.html";
+                // changed to login.html to match Playwright test
+                window.location.href = "/login.html";
             };
         })
         .catch(err => {
@@ -174,3 +173,6 @@ function renderExercises(exercises) {
         `);
     });
 }
+
+// ---------------- Auto load on page load ----------------
+document.addEventListener("DOMContentLoaded", loadClientWorkout);
