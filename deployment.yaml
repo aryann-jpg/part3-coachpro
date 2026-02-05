@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coachpro-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: coachpro
+  template:
+    metadata:
+      labels:
+        app: coachpro
+    spec:
+      containers:
+        - name: coachpro
+          image: coachpro-app
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5050
