@@ -1,0 +1,69 @@
+name: CoachPro CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: coachpro-app
+      BUILD_NUMBER: ${{ github.run_number }}
+
+    steps:
+      # 1️⃣ Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2️⃣ Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3️⃣ Install dependencies
+      - name: Install npm dependencies
+        run: npm install
+
+      # 4️⃣ Run backend tests
+      - name: Run backend tests
+        run: npm test
+
+      # 5️⃣ Run frontend tests
+      - name: Run frontend tests
+        run: npm run test-frontend
+
+      # 6️⃣ Setup Docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      # 7️⃣ Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t $IMAGE_NAME:$BUILD_NUMBER .
+
+      # 8️⃣ Start Minikube
+      - name: Start Minikube
+        uses: medyagh/setup-minikube@v0.0.14
+        with:
+          driver: docker
+
+      # 9️⃣ Load image into Minikube
+      - name: Load Docker image into Minikube
+        run: |
+          minikube image load $IMAGE_NAME:$BUILD_NUMBER
+
+      # 🔟 Replace BUILD_NUMBER and deploy
+      - name: Deploy to Kubernetes
+        run: |
+          sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" deployment.yaml | kubectl apply -f -
+          kubectl apply -f service.yaml
+
+      # 1️⃣1️⃣ Verify deployment
+      - name: Verify Kubernetes resources
+        run: |
+          kubectl get pods
+          kubectl get services
