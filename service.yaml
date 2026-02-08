@@ -11,4 +11,4 @@ spec:
       port: 5050
       targetPort: 5050
       nodePort: 30080
-kubectl delete pod -l app=coachpro
+
