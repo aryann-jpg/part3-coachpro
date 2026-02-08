@@ -6,6 +6,8 @@ const { addWorkout } = require('./utils/SufianUtil.js');
 const { updateWorkoutPlan } = require('./utils/AryanUtil.js');
 const { getWorkoutForDay } = require('./utils/WorkoutUtil.js');
 const { addWorkoutTemplate } = require('./utils/YixuanUtil.js');
+const cors = require('cors');
+app.use(cors()); // allow all origins (for development only)
 
 const app = express();
 const PORT = process.env.PORT || 5050;
