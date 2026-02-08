@@ -7,13 +7,14 @@ const { updateWorkoutPlan } = require('./utils/AryanUtil.js');
 const { getWorkoutForDay } = require('./utils/WorkoutUtil.js');
 const { addWorkoutTemplate } = require('./utils/YixuanUtil.js');
 const cors = require('cors');
-app.use(cors()); // allow all origins (for development only)
+
 
 const app = express();
 const PORT = process.env.PORT || 5050;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+pp.use(cors()); // allow all origins (for development only)
 
 // Serve static files from 'public', default file is login.html
 app.use(express.static(path.join(__dirname, 'public'), { index: 'login.html' }));
