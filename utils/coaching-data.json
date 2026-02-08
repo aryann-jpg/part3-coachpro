@@ -1,54 +1,178 @@
 {
+  "coaches": [
+    {
+      "coachId": "c001",
+      "username": "coach_alex",
+      "hashed_password": "securely_hashed_password_placeholder",
+      "full_name": "Alex Johnson",
+      "client_ids": [
+        "cl_001",
+        "cl_002"
+      ]
+    }
+  ],
   "clients": [
     {
-      "clientId": "client-chromium",
-      "name": "Test Client (chromium)"
+      "clientId": "cl_001",
+      "coachId": "c001",
+      "name": "Sarah Chen",
+      "goal": "Build functional strength and endurance.",
+      "profile_image_url": "images/sarah_chen.jpg"
     },
     {
-      "clientId": "client-firefox",
-      "name": "Test Client (firefox)"
-    },
-    {
-      "clientId": "client-webkit",
-      "name": "Test Client (webkit)"
+      "clientId": "cl_002",
+      "coachId": "c001",
+      "name": "Bombo Clart",
+      "goal": "Build functional strength and endurance.",
+      "profile_image_url": "images/bombo_clart.jpg"
     }
   ],
   "workouts": [
     {
-      "clientId": "client-chromium",
+      "workoutId": "wk001",
+      "clientId": "cl_001",
       "plan": {
         "Monday": [
           {
+            "workout_name": "Squats",
+            "sets": 3,
+            "reps": 8,
+            "weight": 60
+          },
+          {
             "workout_name": "Bench Press",
             "sets": 3,
+            "reps": 8,
+            "weight": 40
+          },
+          {
+            "workout_name": "Bent-Over Rows",
+            "sets": 3,
             "reps": 10,
-            "weight": 60
+            "weight": 35
           }
-        ]
+        ],
+        "Tuesday": [],
+        "Wednesday": [
+          {
+            "workout_name": "Run (5km)",
+            "sets": 1,
+            "reps": 1,
+            "weight": 0
+          }
+        ],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+        "Sunday": []
       }
     },
     {
-      "clientId": "client-firefox",
+      "workoutId": "wk1762973732984172",
+      "clientId": "cl_002",
       "plan": {
         "Monday": [
           {
             "workout_name": "Bench Press",
-            "sets": 3,
-            "reps": 10,
-            "weight": 60
+            "sets": "3",
+            "reps": "18",
+            "weight": "50"
+          },
+          {
+            "workout_name": "Lateral Raises",
+            "sets": "3",
+            "reps": "15",
+            "weight": "10"
+          },
+          {
+            "workout_name": "Tricep Pushdowns",
+            "sets": "3",
+            "reps": "15",
+            "weight": "25"
           }
-        ]
-      }
-    },
-    {
-      "clientId": "client-webkit",
-      "plan": {
-        "Monday": [
+        ],
+        "Tuesday": [
           {
-            "workout_name": "Bench Press",
+            "workout_name": "Legs Press",
+            "sets": "3",
+            "reps": "10",
+            "weight": "55"
+          },
+          {
+            "workout_name": "Calves Raises",
+            "sets": "3",
+            "reps": "15",
+            "weight": "25"
+          },
+          {
+            "workout_name": "Legs Extension",
+            "sets": "5",
+            "reps": "15",
+            "weight": "50"
+          }
+        ],
+        "Wednesday": [
+          {
+            "workout_name": "Rest Day",
+            "sets": "",
+            "reps": "",
+            "weight": ""
+          },
+          {
+            "workout_name": "Military Press",
+            "sets": 2,
+            "reps": 12,
+            "weight": 20
+          }
+        ],
+        "Thursday": [
+          {
+            "workout_name": "Rest Dayzz",
+            "sets": "1",
+            "reps": "1",
+            "weight": "1"
+          },
+          {
+            "workout_name": "Serious",
+            "sets": "2",
+            "reps": "12",
+            "weight": "20"
+          }
+        ],
+        "Friday": [
+          {
+            "workout_name": "Bench Prezzz",
+            "sets": "55",
+            "reps": "2",
+            "weight": "20"
+          },
+          {
+            "workout_name": "Hello",
             "sets": 3,
-            "reps": 10,
-            "weight": 60
+            "reps": 12,
+            "weight": 20
+          },
+          {
+            "workout_name": "Why",
+            "sets": 2,
+            "reps": 12,
+            "weight": 20
+          }
+        ],
+        "Saturday": [
+          {
+            "workout_name": "Not againzzzz",
+            "sets": "5",
+            "reps": "0",
+            "weight": "0"
+          }
+        ],
+        "Sunday": [
+          {
+            "workout_name": "Weighted Pull-ups",
+            "sets": 3,
+            "reps": 12,
+            "weight": 10
           }
         ]
       }
