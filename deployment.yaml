@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: coachpro
-          image: coachpro-app
+          image: coachpro-app:{{BUILD_NUMBER}}
           imagePullPolicy: Never
           ports:
             - containerPort: 5050
