@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5050;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-pp.use(cors()); // allow all origins (for development only)
+app.use(cors()); // allow all origins (for development only)
 
 // Serve static files from 'public', default file is login.html
 app.use(express.static(path.join(__dirname, 'public'), { index: 'login.html' }));
