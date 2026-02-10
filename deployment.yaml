@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: coachpro # Container name
-          image: coachpro-app # Docker image
+          image: coachpro-app:{{BUILD_NUMBER}} # Docker image
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5050 # Port exposed
