@@ -1,8 +1,3 @@
-// Determine backend URL dynamically
-const BACKEND_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:5050'   // development backend port
-    : '';                       // production same-origin
-
 async function handleLogin(event) {
     event.preventDefault();
 
@@ -19,7 +14,7 @@ async function handleLogin(event) {
 
     try {
         // Use full backend URL if specified
-        const response = await fetch(`${BACKEND_URL}/api/login`, {
+        const response = await fetch(`http://localhost:5050/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
