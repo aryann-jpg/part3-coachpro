@@ -159,7 +159,7 @@ function renderExercises(exercises) {
             <span>Workout Name</span>
             <span>Sets</span>
             <span>Reps</span>
-            <span>Weight (kg)</span>
+            <span>Mass (kg)</span>
         </div>
     `;
 
