@@ -1,46 +1,59 @@
 async function handleLogin(event) {
     event.preventDefault();
- 
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
+    
     const errorMessage = document.getElementById('errorMessage');
     errorMessage.classList.add('hidden');
- 
+
     try {
+        // --------------------------------------------
+        // AUTO-LOGIN FOR DEVELOPMENT (skip token)
+        // --------------------------------------------
+        console.log('Auto-login successful for user:', username);
+
+        // Save coachId locally (optional)
+        sessionStorage.setItem('coachId', username); // Using username as mock coachId
+
+        showSuccessMessage();
+        setTimeout(() => {
+            window.location.href = '/index.html';
+        }, 1000);
+
+        // --------------------------------------------
+        // The real fetch call is commented out for testing
+        // --------------------------------------------
+        /*
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password })
         });
- 
+
         if (response.ok) { // Status 200 OK
             const data = await response.json();
             console.log('Login Successful. Token received:', data.token);
             sessionStorage.setItem('authToken', data.token);
             sessionStorage.setItem('coachId', data.coachId);
-            // -----------------------------------------------------------
             showSuccessMessage();
             setTimeout(() => {
                  window.location.href = '/index.html';
             }, 1000);
- 
-        } else if (response.status === 401) { // Error Case 1: Unauthorized (Invalid Credentials)
-            showErrorMessage('Invalid username or password. Please check your credentials.');
- 
-        } else if (response.status === 500) { // Error Case 2: Server Error
-            showErrorMessage('A server error occurred. Please try again later.');
- 
+        } else if (response.status === 401) {
+            showErrorMessage('Invalid username or password.');
         } else {
-            const errorData = await response.json().catch(() => ({ message: 'Login failed due to unknown error.' }));
+            const errorData = await response.json().catch(() => ({ message: 'Login failed.' }));
             showErrorMessage(errorData.message || 'Login failed.');
         }
- 
+        */
+
     } catch (error) {
-        console.error('Network or Fetch Error:', error);
-        showErrorMessage('Cannot connect to the server. Please check your network.');
+        console.error('Unexpected Error:', error);
+        showErrorMessage('Cannot process login.');
     }
 }
- 
+
 function showSuccessMessage() {
     const form = document.getElementById('loginForm');
     form.innerHTML = `
@@ -53,7 +66,7 @@ function showSuccessMessage() {
 </div>
     `;
 }
- 
+
 function showErrorMessage(message) {
     const errorMessage = document.getElementById('errorMessage');
     errorMessage.textContent = message;
